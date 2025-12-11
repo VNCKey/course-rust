@@ -1,9 +1,3 @@
-
-
-```asciidoc
-=== Código Rust – tipos escalares
-
-[source,rust,subs=attributes+]
 ----
 use std::mem::size_of_val;
 
@@ -18,3 +12,4 @@ fn main() {
     println!("bool: {}  ({} bytes)", booleano, size_of_val(&booleano));
     println!("char: {}  ({} bytes)", caracter, size_of_val(&caracter));
 }
+----
