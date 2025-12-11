@@ -1,0 +1,417 @@
+= 📦 Cargo: Compilación y Gestión de Dependencias
+:toc: left
+:toclevels: 3
+:sectnums:
+:icons: font
+:source-highlighter: rouge
+:experimental:
+
+== ¿Qué es Cargo?
+
+*Cargo* es el sistema de compilación y gestor de paquetes oficial de Rust. Es una herramienta fundamental que simplifica todo el ciclo de desarrollo, desde la creación de proyectos hasta la gestión de dependencias y la compilación.
+
+Cargo se instala automáticamente cuando instalas Rust a través de `rustup`.
+
+=== ¿Por qué es importante Cargo?
+
+En otros lenguajes, necesitas múltiples herramientas:
+
+* *C/C++*: `make`, `cmake`, `pkg-config`
+* *JavaScript*: `npm` o `yarn` + `webpack`
+* *Python*: `pip` + `setuptools` + `virtualenv`
+
+.*En Rust, Cargo lo hace todo:*
+[%hardbreaks]
+✅ Crea y estructura proyectos
+✅ Compila tu código
+✅ Descarga y gestiona dependencias
+✅ Ejecuta tests
+✅ Genera documentación
+✅ Publica paquetes en https://crates.io[crates.io]
+
+'''
+
+== 🚀 Comandos Básicos de Compilación
+
+=== Crear un nuevo proyecto
+
+[source,bash]
+----
+# Crear un proyecto binario (aplicación)
+cargo new mi_proyecto
+
+# Crear un proyecto biblioteca
+cargo new mi_libreria --lib
+----
+
+.*Estructura generada:*
+----
+mi_proyecto/
+├── Cargo.toml          # Archivo de configuración
+├── src/
+│   └── main.rs         # Código fuente principal
+└── .gitignore          # Git configurado automáticamente
+----
+
+=== Compilar el proyecto
+
+[source,bash]
+----
+# Compilación en modo desarrollo (más rápida, sin optimizaciones)
+cargo build
+
+# Compilación optimizada para producción
+cargo build --release
+----
+
+.*Diferencias clave:*
+[cols="1,2,2,1,1", options="header"]
+|===
+|Modo
+|Comando
+|Ubicación
+|Velocidad
+|Optimización
+
+|*Debug*
+|`cargo build`
+|`target/debug/`
+|Rápida
+|No
+
+|*Release*
+|`cargo build --release`
+|`target/release/`
+|Lenta
+|Sí
+|===
+
+TIP: Usa `--release` solo cuando necesites máximo rendimiento (producción, benchmarks).
+
+=== Compilar y ejecutar
+
+[source,bash]
+----
+# Compila y ejecuta automáticamente
+cargo run
+
+# Con argumentos
+cargo run -- arg1 arg2
+
+# En modo release
+cargo run --release
+----
+
+=== Verificar sin compilar completamente
+
+[source,bash]
+----
+# Revisa errores sin generar el ejecutable (MUY rápido)
+cargo check
+----
+
+NOTE: `cargo check` es hasta 10x más rápido que `cargo build` durante el desarrollo.
+
+=== Limpiar archivos compilados
+
+[source,bash]
+----
+# Elimina la carpeta target/
+cargo clean
+----
+
+'''
+
+== 📚 Gestión de Dependencias
+
+=== El archivo `Cargo.toml`
+
+El corazón de tu proyecto. Define metadatos y dependencias:
+
+[source,toml]
+----
+[package]
+name = "mi_proyecto"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tu Nombre <tu@email.com>"]
+
+[dependencies]
+# Aquí van las dependencias externas
+----
+
+=== Añadir dependencias
+
+.*Formato básico:*
+[source,toml]
+----
+[dependencies]
+serde = "1.0"
+tokio = "1.35"
+----
+
+.*Con características específicas:*
+[source,toml]
+----
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+----
+
+.*Desde Git:*
+[source,toml]
+----
+[dependencies]
+mi_lib = { git = "https://github.com/usuario/repo" }
+----
+
+.*Dependencias locales:*
+[source,toml]
+----
+[dependencies]
+mi_lib = { path = "../mi_lib" }
+----
+
+=== Versiones y semántica
+
+Cargo usa https://semver.org/[Semantic Versioning]:
+
+[source,toml]
+----
+[dependencies]
+# Exacta
+serde = "=1.0.195"
+
+# Compatible (recomendado) - permite 1.0.x
+serde = "1.0"
+
+# Rango
+serde = ">=1.0, <2.0"
+
+# Última versión (NO recomendado en producción)
+serde = "*"
+----
+
+WARNING: `"1.0"` es equivalente a `"^1.0"` (caret), que permite actualizaciones compatibles (1.0.x, 1.1.x, etc.), pero NO 2.0.
+
+=== Dependencias de desarrollo
+
+Para testing y herramientas de desarrollo:
+
+[source,toml]
+----
+[dev-dependencies]
+criterion = "0.5"  # Para benchmarks
+proptest = "1.4"   # Para property testing
+----
+
+Estas *NO* se incluyen en la compilación final del binario.
+
+=== Actualizar dependencias
+
+[source,bash]
+----
+# Actualizar según Cargo.toml (respetando semver)
+cargo update
+
+# Actualizar una dependencia específica
+cargo update -p serde
+
+# Ver versiones disponibles
+cargo search serde
+----
+
+'''
+
+== 🔧 Comandos Avanzados
+
+=== Testing
+
+[source,bash]
+----
+# Ejecutar todos los tests
+cargo test
+
+# Ejecutar tests específicos
+cargo test mi_test
+
+# Mostrar output de println! en tests
+cargo test -- --nocapture
+----
+
+=== Documentación
+
+[source,bash]
+----
+# Generar y abrir documentación
+cargo doc --open
+
+# Incluir dependencias
+cargo doc --open --document-private-items
+----
+
+=== Benchmarks
+
+[source,bash]
+----
+cargo bench
+----
+
+=== Publicar en crates.io
+
+[source,bash]
+----
+# Verificar antes de publicar
+cargo publish --dry-run
+
+# Publicar
+cargo publish
+----
+
+'''
+
+== 📁 Estructura del Proyecto
+
+----
+mi_proyecto/
+├── Cargo.toml           # Configuración del proyecto
+├── Cargo.lock           # Versiones exactas (¡no editar manualmente!)
+├── src/
+│   ├── main.rs          # Punto de entrada (binario)
+│   ├── lib.rs           # Punto de entrada (biblioteca)
+│   └── bin/             # Múltiples binarios
+│       └── otro.rs
+├── tests/               # Tests de integración
+│   └── integration_test.rs
+├── benches/             # Benchmarks
+│   └── my_benchmark.rs
+├── examples/            # Ejemplos de uso
+│   └── ejemplo.rs
+└── target/              # Archivos compilados (ignorar en Git)
+----
+
+=== Cargo.lock
+
+[horizontal]
+Binarios:: ✅ Commitear al repositorio
+Bibliotecas:: ❌ Añadir al `.gitignore`
+
+Esto garantiza builds reproducibles en aplicaciones.
+
+'''
+
+== 💡 Tips y Mejores Prácticas
+
+=== 1. Usa alias en `~/.cargo/config.toml`
+
+[source,toml]
+----
+[alias]
+b = "build"
+r = "run"
+t = "test"
+c = "check"
+----
+
+Ahora puedes usar: `cargo c` en lugar de `cargo check`
+
+=== 2. Compilación incremental
+
+Cargo compila solo lo que cambió. Para forzar recompilación completa:
+
+[source,bash]
+----
+cargo clean && cargo build
+----
+
+=== 3. Perfiles de compilación personalizados
+
+En `Cargo.toml`:
+
+[source,toml]
+----
+[profile.dev]
+opt-level = 0  # Sin optimización (rápido)
+
+[profile.release]
+opt-level = 3     # Máxima optimización
+lto = true        # Link-Time Optimization
+codegen-units = 1 # Mejor optimización, compilación más lenta
+----
+
+=== 4. Características opcionales
+
+[source,toml]
+----
+[features]
+default = ["feature1"]
+feature1 = []
+feature2 = ["dep:serde"]
+
+[dependencies]
+serde = { version = "1.0", optional = true }
+----
+
+Compilar con feature:
+[source,bash]
+----
+cargo build --features "feature2"
+----
+
+'''
+
+== 🎯 Cheat Sheet
+
+[cols="2,3", options="header"]
+|===
+|Comando
+|Descripción
+
+|`cargo new <nombre>`
+|Crear proyecto
+
+|`cargo build`
+|Compilar (debug)
+
+|`cargo build --release`
+|Compilar (optimizado)
+
+|`cargo run`
+|Compilar y ejecutar
+
+|`cargo check`
+|Verificar sin compilar
+
+|`cargo test`
+|Ejecutar tests
+
+|`cargo clean`
+|Limpiar target/
+
+|`cargo update`
+|Actualizar dependencias
+
+|`cargo doc --open`
+|Generar documentación
+
+|`cargo add <crate>`
+|Añadir dependencia (Rust 1.62+)
+|===
+
+'''
+
+== 🔗 Recursos Adicionales
+
+* 📖 https://doc.rust-lang.org/cargo/[Documentación oficial de Cargo]
+* 📦 https://crates.io[Crates.io] - Repositorio de paquetes
+* 🔍 https://docs.rs[Docs.rs] - Documentación de crates
+* 📚 https://doc.rust-lang.org/cargo/index.html[Cargo Book]
+
+'''
+
+[quote, Rust Community]
+____
+🦀 *Recuerda*: Cargo es tu mejor amigo en Rust. Aprende a dominarlo y tu productividad se multiplicará.
+____
+
+*Siguiente tema*: Variables y Mutabilidad (`let` y `let mut`) →
