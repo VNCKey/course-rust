@@ -1,4 +1,4 @@
-[source,rust]
+[source,rust,linenums,title="Tipos escalares en Rust"]
 ----
 use std::mem::size_of_val;
 
