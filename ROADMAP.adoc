@@ -1,0 +1,145 @@
+= Rust Peru 🦀
+
+
+
+
+[abstract]
+.Sobre esta Ruta
+====
+Esta es una ruta de aprendizaje completa y moderna de Rust para 2026. Cubre desde la instalación hasta temas avanzados como async, macros procedurales, unsafe, FFI y arquitectura de sistemas.
+
+*Tiempo estimado*: 4-6 meses (dedicación diaria) +
+*Nivel final*: Experto en Rust
+====
+
+'''
+
+[.text-center]
+🎯 Niveles de Dominio
+
+[cols="1,2,1,3", options="header"]
+|===
+|Nivel
+|Descripción
+|Módulos
+|Duración Estimada
+
+|🌱 *Principiante*
+|Sintaxis básica, ownership, control de flujo
+|0-3
+|3-4 semanas
+
+|🌿 *Intermedio*
+|Estructuras, traits, colecciones, errores
+|4-7
+|4-6 semanas
+
+|🌳 *Avanzado*
+|Async, macros, testing, optimización
+|8-11
+|6-8 semanas
+
+|🔥 *Experto*
+|Unsafe, FFI, arquitectura, ecosistema completo
+|12-15
+|4-6 semanas
+|===
+
+'''
+
+= RECURSOS Y COMUNIDAD 📚
+
+== Documentación Oficial
+* https://doc.rust-lang.org/book/[The Rust Book]
+* https://doc.rust-lang.org/rust-by-example/[Rust by Example]
+* https://doc.rust-lang.org/reference/[The Rust Reference]
+* https://doc.rust-lang.org/nomicon/[The Rustonomicon] (unsafe)
+* https://rust-lang.github.io/async-book/[Async Book]
+
+== Libros Recomendados
+* *Programming Rust* (O'Reilly)
+* *Rust in Action* (Manning)
+* *Zero To Production In Rust* (web development)
+* *Rust for Rustaceans* (avanzado)
+
+== Ejercicios y Práctica
+* https://exercism.org/tracks/rust[Exercism Rust Track]
+* https://github.com/rust-lang/rustlings[Rustlings]
+* https://adventofcode.com/[Advent of Code] (en Rust)
+* https://leetcode.com/[LeetCode] (practicar con Rust)
+
+== Comunidad
+* https://users.rust-lang.org/[Foro oficial]
+* https://www.reddit.com/r/rust/[r/rust en Reddit]
+* Discord de Rust (oficial)
+* https://github.com/rust-lang/rust[GitHub - contribuir]
+
+== Blogs y Newsletters
+* https://blog.rust-lang.org/[Rust Blog oficial]
+* https://this-week-in-rust.org/[This Week in Rust]
+* https://rust-analyzer.github.io/[Rust Analyzer blog]
+
+== Podcasts
+* Rustacean Station
+* New Rustacean
+
+'''
+
+
+= CONSEJOS Y MEJORES PRÁCTICAS 💡
+
+== Durante el Aprendizaje
+
+TIP: *Practica todos los días*. Aunque sea 30 minutos.
+
+TIP: *Lee código de otros*. Explora crates populares en crates.io.
+
+TIP: *No tengas miedo del borrow checker*. Es tu amigo, te está enseñando.
+
+TIP: *Usa Clippy*. Te ayuda a escribir código idiomático.
+
+WARNING: *No uses `unwrap()` en producción*. Maneja errores apropiadamente.
+
+IMPORTANT: *Entiende ownership antes de seguir*. Es el fundamento de todo.
+
+== Hábitos Productivos
+
+* Escribe tests desde el principio
+* Documenta tu código (doc comments)
+* Usa `cargo fmt` automáticamente
+* Ejecuta `cargo clippy` regularmente
+* Lee mensajes de error completos (son muy buenos)
+* Contribuye a proyectos open source
+
+== Cuando Te Atores
+
+. Lee el mensaje de error completo (Rust tiene los mejores)
+. Busca en https://doc.rust-lang.org/[docs oficiales]
+. Pregunta en https://users.rust-lang.org/[el foro]
+. Usa https://play.rust-lang.org/[Rust Playground] para experimentar
+. Simplifica el problema a un caso mínimo
+
+'''
+
+[quote, Rust Community]
+____
+🦀 *¡Bienvenido a Rust!*
+
+El aprendizaje puede ser empinado al principio, pero vale la pena.
+Rust te hará un mejor programador en cualquier lenguaje.
+
+*"Fighting the borrow checker makes you a better developer."*
+____
+
+'''
+
+[.text-center]
+== 🎯 Próximos Pasos
+
+. Instala Rust
+. Lee los Módulos 0-1 de esta guía
+. Completa https://github.com/rust-lang/rustlings[Rustlings]
+. Lee https://doc.rust-lang.org/book/[The Rust Book] en paralelo
+. Construye proyectos pequeños constantemente
+
+*¡Buena suerte en tu viaje con Rust!* 🚀
