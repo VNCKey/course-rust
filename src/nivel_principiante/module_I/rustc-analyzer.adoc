@@ -1,0 +1,956 @@
+= 🔧 rustc y rust-analyzer: Herramientas Fundamentales de Rust
+:source-highlighter: rouge
+:rouge-style: monokai
+:icons: font
+:toc: left
+:toclevels: 3
+:toc-title: Contenido
+:sectnums:
+:experimental:
+
+[abstract]
+.Sobre este documento
+====
+Esta guía explica dos herramientas fundamentales del ecosistema Rust: *rustc* (el compilador) y *rust-analyzer* (el servidor de lenguaje).
+
+Entender estas herramientas te ayudará a:
+
+* Comprender cómo funciona Rust internamente
+* Depurar problemas de compilación
+* Aprovechar al máximo tu editor
+* Ser más productivo en tu desarrollo diario
+
+*Nivel*: Principiante a Intermedio +
+*Tiempo de lectura*: 15-20 minutos
+====
+
+'''
+
+= Parte 1: rustc - El Compilador de Rust
+
+== ¿Qué es rustc?
+
+*rustc* es el **compilador oficial de Rust**. Es el programa que transforma tu código fuente (archivos `.rs`) en ejecutables que tu computadora puede ejecutar.
+
+[NOTE]
+====
+Aunque usamos `cargo` en el día a día, internamente Cargo llama a `rustc` para compilar tu código. Entender `rustc` te ayuda a comprender mejor lo que sucede "bajo el capó".
+====
+
+=== Analogía Simple
+
+Imagina que escribes una receta en español, pero tu horno solo entiende instrucciones en lenguaje de máquina. El compilador `rustc` es el traductor que convierte tu receta (código Rust) en instrucciones que el horno (CPU) puede ejecutar.
+
+.Proceso de Compilación
+[source,text]
+----
+Código Rust (.rs) → rustc → Binario Ejecutable (.exe o sin extensión)
+      ↓                ↓              ↓
+  Legible por       Traductor    Ejecutable por
+   humanos                       la computadora
+----
+
+'''
+
+== ¿Por Qué es Fundamental Entender rustc?
+
+=== 1. Verificación en Tiempo de Compilación
+
+Rust es famoso por detectar errores **antes** de que tu programa se ejecute. Esto lo hace `rustc`:
+
+[cols="1,2", options="header"]
+|===
+|Tipo de Error
+|Lo que rustc Verifica
+
+|*Ownership*
+|¿Hay múltiples dueños de un valor?
+
+|*Borrowing*
+|¿Se están violando las reglas de préstamo?
+
+|*Tipos*
+|¿Los tipos coinciden correctamente?
+
+|*Lifetimes*
+|¿Las referencias viven lo suficiente?
+
+|*Concurrencia*
+|¿Hay data races potenciales?
+|===
+
+.Ejemplo: rustc detectando un error
+[source,rust,linenums]
+----
+fn main() {
+    let x = 5;
+    x = 10;  // <1>
+}
+----
+<1> Error: `x` es inmutable por defecto
+
+.Mensaje de error de rustc
+[source,text]
+----
+error[E0384]: cannot assign twice to immutable variable `x`
+ --> src/main.rs:3:5
+  |
+2 |     let x = 5;
+  |         -
+  |         |
+  |         first assignment to `x`
+  |         help: consider making this binding mutable: `mut x`
+3 |     x = 10;
+  |     ^^^^^^ cannot assign twice to immutable variable
+----
+
+IMPORTANT: Los mensajes de error de `rustc` son **educativos**. No solo te dicen qué está mal, sino también *por qué* y *cómo arreglarlo*.
+
+=== 2. Optimización Agresiva
+
+`rustc` usa LLVM como backend, lo que le permite generar código extremadamente optimizado:
+
+[source,rust,linenums]
+----
+// Código que escribes
+fn suma(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn main() {
+    let resultado = suma(5, 3);
+    println!("{}", resultado);
+}
+----
+
+Cuando compiles con `--release`, `rustc`:
+
+* Elimina código muerto
+* Inline funciones pequeñas
+* Optimiza loops
+* Reordena instrucciones para mejor uso de caché
+
+=== 3. Seguridad sin Costo en Runtime
+
+Rust verifica todo en *tiempo de compilación*, no en *tiempo de ejecución*:
+
+[cols="1,1,1", options="header"]
+|===
+|Lenguaje
+|Verificación
+|Costo
+
+|*Java/Python*
+|Runtime (mientras se ejecuta)
+|❌ Más lento
+
+|*C/C++*
+|Ninguna
+|⚠️ Peligroso
+
+|*Rust*
+|Compile-time (antes de ejecutar)
+|✅ Rápido y seguro
+|===
+
+'''
+
+== Uso Básico de rustc
+
+=== Compilar un Archivo Simple
+
+.Crear un archivo main.rs
+[source,rust]
+----
+fn main() {
+    println!("¡Hola desde rustc!");
+}
+----
+
+.Compilar con rustc
+[source,bash]
+----
+rustc main.rs
+----
+
+Esto genera:
+
+* **Windows**: `main.exe`
+* **Linux/macOS**: `main`
+
+.Ejecutar el programa
+[source,bash]
+----
+# Windows
+.\main.exe
+
+# Linux/macOS
+./main
+----
+
+=== Opciones Comunes de rustc
+
+==== Especificar el Nombre del Ejecutable
+
+[source,bash]
+----
+rustc main.rs -o mi_programa
+----
+
+==== Nivel de Optimización
+
+[source,bash]
+----
+rustc main.rs -O           # <1>
+rustc main.rs -C opt-level=3  # <2>
+----
+<1> Optimización básica
+<2> Máxima optimización (equivalente a `cargo build --release`)
+
+==== Ver Warnings
+
+[source,bash]
+----
+rustc main.rs -W unused-variables  # <1>
+rustc main.rs -W help              # <2>
+----
+<1> Advertir sobre variables no usadas
+<2> Ver todos los warnings disponibles
+
+==== Información de Debugging
+
+[source,bash]
+----
+rustc main.rs -g  # Incluye símbolos de debug
+----
+
+'''
+
+== Cómo Funciona rustc (Internamente)
+
+rustc procesa tu código en varias etapas:
+
+.Fases de Compilación
+[source,text]
+----
+1. Lexing       → Convierte texto en tokens
+2. Parsing      → Crea el AST (Abstract Syntax Tree)
+3. Expansion    → Expande macros
+4. Resolution   → Resuelve nombres y paths
+5. Type Check   → Verifica tipos y borrow checker
+6. MIR          → Mid-level Intermediate Representation
+7. LLVM IR      → Representación de LLVM
+8. Codegen      → Código máquina nativo
+----
+
+[NOTE]
+====
+No necesitas entender cada fase en detalle, pero saber que existen te ayuda a:
+
+* Entender mensajes de error
+* Usar herramientas como `cargo expand`
+* Depurar problemas complejos
+====
+
+=== Ejemplo: Ver el AST de tu Código
+
+[source,bash]
+----
+rustc -Z ast main.rs  # Requiere nightly
+----
+
+'''
+
+== rustc vs Cargo
+
+[cols="1,2,2", options="header"]
+|===
+|
+|rustc
+|Cargo
+
+|*Qué es*
+|Compilador (herramienta de bajo nivel)
+|Build system y gestor de paquetes
+
+|*Uso típico*
+|Archivos simples, experimentación
+|Proyectos reales
+
+|*Gestión de deps*
+|❌ No
+|✅ Sí
+
+|*Build profiles*
+|Manual
+|Automático (dev/release)
+
+|*Testing*
+|❌ No integrado
+|✅ `cargo test`
+
+|*Cuándo usar*
+|Aprender, scripts pequeños
+|Siempre en proyectos reales
+|===
+
+TIP: En la práctica, *siempre usa Cargo* para proyectos reales. Solo usa `rustc` directamente para:
+* Experimentar con flags específicos
+* Entender cómo funciona internamente
+* Scripts de un solo archivo
+
+'''
+
+= Parte 2: rust-analyzer - El Language Server
+
+== ¿Qué es un Language Server?
+
+Antes de hablar de `rust-analyzer`, entendamos qué es un **Language Server Protocol (LSP)**.
+
+=== El Problema que Resuelve LSP
+
+Imagina que tienes 5 editores diferentes (VS Code, Vim, Emacs, Sublime, Atom) y 10 lenguajes de programación. Sin LSP necesitarías:
+
+.Sin LSP
+[source,text]
+----
+5 editores × 10 lenguajes = 50 integraciones diferentes 😱
+----
+
+Con LSP, cada lenguaje implementa *un solo servidor* y cada editor implementa *un solo cliente*:
+
+.Con LSP
+[source,text]
+----
+5 editores + 10 servidores = 15 implementaciones 🎉
+----
+
+=== ¿Cómo Funciona?
+
+.Arquitectura LSP
+[source,text]
+----
+Editor (VS Code, Vim, etc.)
+    ↕️  (comunicación JSON-RPC)
+Language Server (rust-analyzer)
+    ↕️
+Análisis del código Rust
+----
+
+Cuando escribes código:
+
+. El editor envía tu código al servidor
+. El servidor lo analiza
+. El servidor responde con:
+** Errores y warnings
+** Sugerencias de autocompletado
+** Información de tipos
+** Definiciones de funciones
+** Etc.
+
+'''
+
+== ¿Qué es rust-analyzer?
+
+*rust-analyzer* es el **Language Server oficial de Rust**. Es el "cerebro" que hace que tu editor entienda Rust.
+
+[IMPORTANT]
+====
+No confundir con:
+
+* *rustc*: El compilador (transforma código en ejecutable)
+* *rust-analyzer*: El servidor de lenguaje (ayuda mientras escribes)
+====
+
+=== Características Principales
+
+==== 1. Autocompletado Inteligente
+
+Cuando escribes:
+
+[source,rust]
+----
+let nombre = String::from("Rust");
+nombre.  // <1>
+----
+<1> rust-analyzer muestra todos los métodos de String
+
+.Ejemplo de autocompletado
+[source,text]
+----
+nombre.len()           → usize
+nombre.push_str(s)     → ()
+nombre.to_uppercase()  → String
+nombre.chars()         → Chars<'_>
+...y muchos más
+----
+
+==== 2. Información de Tipos en Línea
+
+[source,rust,linenums]
+----
+fn suma(a: i32, b: i32) -> i32 {
+    let resultado = a + b;  // rust-analyzer muestra: i32
+    resultado
+}
+----
+
+rust-analyzer te muestra el tipo de `resultado` sin que tengas que anotarlo.
+
+==== 3. Go to Definition
+
+kbd:[F12] o kbd:[Ctrl+Click] en cualquier función/tipo/variable para saltar a su definición.
+
+[source,rust]
+----
+use std::collections::HashMap;
+
+fn main() {
+    let mut mapa = HashMap::new();  // <1>
+    //              ↑ Click aquí
+}
+----
+<1> Te lleva directamente al código fuente de `HashMap::new()`
+
+==== 4. Errores en Tiempo Real
+
+No necesitas compilar para ver errores:
+
+[source,rust]
+----
+fn main() {
+    let x: i32 = "hola";  // ⚠️ Error inmediato
+    //           ~~~~~~
+    //           expected `i32`, found `&str`
+}
+----
+
+==== 5. Refactorings Automáticos
+
+* Renombrar símbolos (kbd:[F2])
+* Extraer funciones
+* Implementar traits automáticamente
+* Añadir imports faltantes
+
+==== 6. Documentación Inline
+
+Hover sobre cualquier función para ver su documentación:
+
+[source,rust]
+----
+let v = vec![1, 2, 3];
+v.push(4);  // <1>
+//  ↑ Hover aquí
+----
+<1> Muestra: "Appends an element to the back of a collection"
+
+'''
+
+== ¿Por Qué es Fundamental rust-analyzer?
+
+=== 1. Productividad 10x
+
+Sin rust-analyzer:
+
+* ❌ Escribes código a ciegas
+* ❌ Esperas compilar para ver errores
+* ❌ Buscas documentación manualmente
+* ❌ Escribes imports a mano
+
+Con rust-analyzer:
+
+* ✅ Ves errores instantáneamente
+* ✅ Autocompletado inteligente
+* ✅ Documentación al instante
+* ✅ Imports automáticos
+
+=== 2. Curva de Aprendizaje Más Suave
+
+rust-analyzer es como tener un tutor de Rust al lado:
+
+[source,rust,linenums]
+----
+fn main() {
+    let s = String::from("hola");
+    let s2 = s;        // <1>
+    println!("{}", s); // <2>
+}
+----
+<1> rust-analyzer te advierte que `s` se movió
+<2> Error inmediato: "value borrowed here after move"
+
+=== 3. Exploración del Código
+
+Puedes explorar el standard library sin salir del editor:
+
+* kbd:[F12] en `Vec::new()` → Ver implementación
+* kbd:[Ctrl+Shift+O] → Buscar símbolos en el proyecto
+* kbd:[Ctrl+T] → Buscar tipos en todas las dependencias
+
+'''
+
+== Instalación y Configuración
+
+=== Verificar Instalación
+
+rust-analyzer se instala automáticamente con rustup moderno:
+
+[source,bash]
+----
+rustup component add rust-analyzer
+----
+
+=== Configuración por Editor
+
+==== VS Code
+
+. Instala la extensión: *rust-analyzer*
+. La extensión descarga el servidor automáticamente
+
+==== Vim/Neovim
+
+Con CoC.nvim:
+
+[source,vim]
+----
+:CocInstall coc-rust-analyzer
+----
+
+Con nvim-lspconfig:
+
+[source,lua]
+----
+require'lspconfig'.rust_analyzer.setup{}
+----
+
+==== Emacs
+
+[source,elisp]
+----
+(use-package rust-mode)
+(use-package lsp-mode
+  :hook (rust-mode . lsp))
+----
+
+==== Zed
+
+rust-analyzer viene preinstalado en Zed.
+
+'''
+
+== Configuración Avanzada
+
+=== Archivo de Configuración
+
+Crea `.vscode/settings.json` (VS Code) o equivalente:
+
+[source,json,linenums]
+----
+{
+  "rust-analyzer.checkOnSave.command": "clippy",  // <1>
+  "rust-analyzer.cargo.allFeatures": true,        // <2>
+  "rust-analyzer.inlayHints.typeHints": true,     // <3>
+  "rust-analyzer.lens.implementations": true      // <4>
+}
+----
+<1> Usa Clippy en lugar de `cargo check`
+<2> Habilita todas las features
+<3> Muestra tipos en línea
+<4> Muestra dónde se implementa cada trait
+
+=== Opciones Útiles
+
+[cols="2,3", options="header"]
+|===
+|Opción
+|Descripción
+
+|`checkOnSave.command`
+|Comando para verificar (`check`, `clippy`, `test`)
+
+|`cargo.features`
+|Features específicas a habilitar
+
+|`inlayHints.*`
+|Hints de tipos, parámetros, etc.
+
+|`lens.*`
+|CodeLens (references, implementations)
+
+|`procMacro.enable`
+|Habilitar expansión de macros procedurales
+|===
+
+'''
+
+== Diferencias Clave: rustc vs rust-analyzer
+
+[cols="1,2,2", options="header"]
+|===
+|
+|rustc
+|rust-analyzer
+
+|*Propósito*
+|Compilar código a binario
+|Análisis en tiempo real
+
+|*Cuándo actúa*
+|Solo al compilar
+|Mientras escribes
+
+|*Velocidad*
+|Más lento (compilación completa)
+|Muy rápido (análisis incremental)
+
+|*Precisión*
+|100% (es el compilador oficial)
+|~99% (puede tener falsos positivos)
+
+|*Output*
+|Ejecutable
+|Información para el editor
+
+|*Uso*
+|Via `cargo build`/`rustc`
+|Via tu editor
+
+|*Errores*
+|Finales y definitivos
+|Ayuda mientras escribes
+|===
+
+[NOTE]
+====
+rust-analyzer usa partes de rustc internamente, pero está optimizado para análisis incremental rápido, no para generar ejecutables.
+====
+
+'''
+
+== Casos de Uso Prácticos
+
+=== Escenario 1: Debugging de Ownership
+
+[source,rust,linenums]
+----
+fn main() {
+    let s1 = String::from("hola");
+    let s2 = s1;  // <1>
+
+    println!("{}", s1);  // <2>
+}
+----
+<1> rust-analyzer muestra: ⓘ value moved here
+<2> rust-analyzer muestra: ⚠️ value used after move
+
+*Sin rust-analyzer*: Tendrías que compilar para ver el error.
+
+*Con rust-analyzer*: Lo ves inmediatamente, incluso antes de salvar el archivo.
+
+=== Escenario 2: Explorando APIs
+
+Quieres usar `HashMap` pero no recuerdas los métodos:
+
+[source,rust]
+----
+use std::collections::HashMap;
+
+fn main() {
+    let mut mapa = HashMap::new();
+    mapa.  // <1>
+}
+----
+<1> rust-analyzer te muestra TODOS los métodos disponibles
+
+Puedes explorar la API sin salir del editor ni consultar docs externas.
+
+=== Escenario 3: Refactoring Seguro
+
+Necesitas renombrar una variable en 50 archivos:
+
+. Coloca el cursor en la variable
+. Presiona kbd:[F2]
+. Escribe el nuevo nombre
+. rust-analyzer renombra *todas* las ocurrencias, incluso en otros archivos
+
+*Garantizado* que no romperás nada.
+
+'''
+
+== Solución de Problemas
+
+=== rust-analyzer No Funciona
+
+==== Problema 1: No encuentra el proyecto
+
+[source,bash]
+----
+# Asegúrate de abrir el editor en la raíz del proyecto
+cd mi_proyecto
+code .  # VS Code
+nvim .  # Neovim
+----
+
+==== Problema 2: Muy lento
+
+.Verifica el tamaño del proyecto
+[source,bash]
+----
+# Si target/ es muy grande
+cargo clean
+
+# O excluye target/ del análisis
+----
+
+.Configuración para proyectos grandes
+[source,json]
+----
+{
+  "rust-analyzer.cargo.buildScripts.enable": false,
+  "rust-analyzer.procMacro.enable": false
+}
+----
+
+==== Problema 3: Errores fantasma
+
+.Reinicia el servidor
+* VS Code: kbd:[Ctrl+Shift+P] → "Restart Language Server"
+* Vim: `:LspRestart`
+
+=== Logs para Debugging
+
+.Ver logs de rust-analyzer
+[source,bash]
+----
+# Linux/macOS
+tail -f ~/.local/state/rust-analyzer/server.log
+
+# Windows
+# Ver en: %APPDATA%\rust-analyzer\logs\
+----
+
+'''
+
+== Mejores Prácticas
+
+=== 1. Usa Cargo Siempre
+
+[source,bash]
+----
+# ✅ Correcto
+cargo new mi_proyecto
+cd mi_proyecto
+
+# ❌ Evitar (rust-analyzer puede no funcionar bien)
+rustc main.rs
+----
+
+rust-analyzer está diseñado para trabajar con proyectos Cargo.
+
+=== 2. Mantén rust-analyzer Actualizado
+
+[source,bash]
+----
+rustup update
+# rust-analyzer se actualiza automáticamente
+----
+
+=== 3. Configura Clippy como Checker
+
+[source,json]
+----
+{
+  "rust-analyzer.checkOnSave.command": "clippy"
+}
+----
+
+Obtendrás sugerencias de estilo además de errores.
+
+=== 4. Aprovecha los Hints
+
+No los desactives al principio. Te enseñan mucho sobre Rust:
+
+[source,json]
+----
+{
+  "rust-analyzer.inlayHints.typeHints": true,
+  "rust-analyzer.inlayHints.parameterHints": true,
+  "rust-analyzer.inlayHints.chainingHints": true
+}
+----
+
+=== 5. Usa CodeLens
+
+[source,json]
+----
+{
+  "rust-analyzer.lens.references": true,
+  "rust-analyzer.lens.implementations": true,
+  "rust-analyzer.lens.run": true
+}
+----
+
+Te permite ver:
+* Dónde se usa una función
+* Dónde se implementa un trait
+* Botón "Run" sobre funciones main/tests
+
+'''
+
+== Comandos Útiles del Día a Día
+
+[cols="2,3,2", options="header"]
+|===
+|Atajo (VS Code)
+|Acción
+|Cuándo Usar
+
+|kbd:[F12]
+|Go to Definition
+|Explorar código
+
+|kbd:[Alt+F12]
+|Peek Definition
+|Ver sin cambiar de archivo
+
+|kbd:[Shift+F12]
+|Find All References
+|Ver dónde se usa algo
+
+|kbd:[F2]
+|Rename Symbol
+|Refactoring
+
+|kbd:[Ctrl+Space]
+|Trigger Completion
+|Forzar autocompletado
+
+|kbd:[Ctrl+Shift+O]
+|Go to Symbol
+|Navegar en archivo
+
+|kbd:[Ctrl+T]
+|Go to Symbol in Workspace
+|Buscar en todo el proyecto
+
+|kbd:[Ctrl+.]
+|Quick Fix
+|Aplicar sugerencias
+|===
+
+'''
+
+== Comparación Visual
+
+.Flujo de Trabajo SIN rust-analyzer
+[source,text]
+----
+1. Escribir código
+2. Guardar archivo
+3. Ejecutar: cargo check
+4. Esperar... ⏳
+5. Ver errores en terminal
+6. Volver al código
+7. Repetir...
+----
+
+.Flujo de Trabajo CON rust-analyzer
+[source,text]
+----
+1. Escribir código
+2. Ver errores inmediatamente ⚡
+3. Autocompletado inteligente
+4. Documentación inline
+5. Refactorings automáticos
+6. Compilar solo cuando esté listo ✅
+----
+
+'''
+
+== Resumen y Conclusiones
+
+=== rustc: El Compilador
+
+[cols="1,2", options="header"]
+|===
+|Qué Hace
+|Por Qué Importa
+
+|Traduce Rust a ejecutable
+|Sin él, no hay programa
+
+|Verifica seguridad
+|Previene bugs antes de ejecutar
+
+|Optimiza código
+|Rendimiento comparable a C
+
+|Mensajes de error educativos
+|Te enseña mientras aprendes
+|===
+
+=== rust-analyzer: Tu Asistente
+
+[cols="1,2", options="header"]
+|===
+|Qué Hace
+|Por Qué Importa
+
+|Análisis en tiempo real
+|Feedback instantáneo
+
+|Autocompletado inteligente
+|10x más productivo
+
+|Navegación de código
+|Explorar sin salir del editor
+
+|Refactorings seguros
+|Cambios sin miedo
+|===
+
+=== Relación Entre Ambos
+
+[source,text]
+----
+Mientras escribes código:
+    rust-analyzer te ayuda y muestra errores
+
+Cuando quieres ejecutar:
+    cargo llama a rustc
+    rustc compila tu código
+    Obtienes un ejecutable
+----
+
+[IMPORTANT]
+====
+*No son competidores, son complementarios:*
+
+* *rustc* = El que realmente compila
+* *rust-analyzer* = Tu asistente mientras programas
+====
+
+'''
+
+== Próximos Pasos
+
+. ✅ Instala rust-analyzer en tu editor favorito
+. ✅ Explora las opciones de configuración
+. ✅ Practica usando los atajos de teclado
+. ✅ Lee los mensajes de error de rustc con atención
+. ✅ Experimenta con `cargo expand` para ver expansión de macros
+
+'''
+
+[quote, Rust Community]
+____
+*rustc* y *rust-analyzer* son el corazón del desarrollo en Rust.
+
+rustc te da seguridad y rendimiento. +
+rust-analyzer te da productividad y feedback instantáneo.
+
+Juntos, hacen de Rust una experiencia de desarrollo única.
+____
+
+[.text-center]
+*Siguiente tema*: Variables y Mutabilidad (`let` y `let mut`) →
