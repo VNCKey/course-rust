@@ -1,0 +1,16 @@
+[source,rust,linenums,highlight=2..4,indent=0,subs="attributes+",id="ejemplo1",role="custom-class"]
+----
+use std::mem::size_of_val;
+
+fn main() {
+    let entero: i32 = 1_000;
+    let flotante: f32 = 3.14;
+    let booleano: bool = true;
+    let caracter: char = 'Ω';
+
+    println!("i32 : {}  ({} bytes)", entero, size_of_val(&entero));
+    println!("f32 : {}  ({} bytes)", flotante, size_of_val(&flotante));
+    println!("bool: {}  ({} bytes)", booleano, size_of_val(&booleano));
+    println!("char: {}  ({} bytes)", caracter, size_of_val(&caracter));
+}
+----
