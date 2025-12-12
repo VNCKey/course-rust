@@ -1,10 +1,27 @@
-= Cargo: Compilación y Gestión de Dependencias
+= 📦 Cargo y Tu Primer Programa en Rust
 :toc: left
 :toclevels: 3
 :sectnums:
 :icons: font
 :source-highlighter: rouge
+:rouge-style: monokai
 :experimental:
+
+[abstract]
+.Sobre este módulo
+====
+En este módulo aprenderás:
+
+* Qué es Cargo y por qué es fundamental
+* Cómo crear y estructurar proyectos
+* Compilar y ejecutar tu primer programa
+* Comandos esenciales para el desarrollo diario
+* Gestión de dependencias
+
+*Tiempo estimado*: 30-45 minutos
+====
+
+'''
 
 == ¿Qué es Cargo?
 
@@ -31,15 +48,20 @@ En otros lenguajes, necesitas múltiples herramientas:
 
 '''
 
-== 🚀 Crear y explorar tu primer proyecto
+== 🚀 Tu Primer Proyecto con Cargo
 
 === Crear un nuevo proyecto
 
 [source,bash]
 ----
 # Crear un proyecto binario (aplicación)
-cargo new mi_proyecto
+cargo new hola_mundo
+
+# Entrar al directorio
+cd hola_mundo
 ----
+
+TIP: Usa nombres en snake_case (letras minúsculas con guiones bajos) para los proyectos.
 
 === Estructura del proyecto generado
 
@@ -47,7 +69,7 @@ Cargo crea automáticamente esta estructura:
 
 .Árbol de archivos generado
 ----
-mundorust/
+hola_mundo/
 ├── Cargo.toml      # <1>
 ├── .gitignore      # <2>
 └── src/
@@ -57,10 +79,19 @@ mundorust/
 <2> Git configurado automáticamente para ignorar archivos compilados
 <3> Archivo principal que contiene la función `main()`
 
+[NOTE]
+====
+Cargo inicializa automáticamente un repositorio Git. Si no quieres esto, usa:
+
+[source,bash]
+----
+cargo new hola_mundo --vcs none
+----
+====
+
 '''
 
-
-== Anatomía del Proyecto
+== 📝 Anatomía del Proyecto
 
 === El archivo `Cargo.toml`
 
@@ -70,7 +101,7 @@ Este es el corazón de tu proyecto. Define metadatos y dependencias:
 [source,toml,linenums]
 ----
 [package]
-name = "mundorust"
+name = "hola_mundo"
 version = "0.1.0"
 edition = "2021"
 
@@ -89,21 +120,6 @@ Contiene los metadatos del proyecto:
 
 `[dependencies]`::
 Lista las bibliotecas externas (_crates_) que necesita tu proyecto. Cargo las descarga y gestiona automáticamente.
-
-.Ejemplo con dependencias
-[source,toml,linenums,highlight=7]
-----
-[package]
-name = "mundorust"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-rand = "0.8"  # <1>
-serde = { version = "1.0", features = ["derive"] }  # <2>
-----
-<1> Librería para generar números aleatorios
-<2> Librería de serialización con características adicionales
 
 === El punto de entrada: `main.rs`
 
@@ -131,82 +147,45 @@ fn main() {  // <1>
 
 '''
 
-== Compilación Simple sin Cargo
+== ⚡ Compilar y Ejecutar
 
-Para pruebas rápidas o aprendizaje, puedes usar el compilador directamente:
+=== Opción 1: Con Cargo (Recomendado)
 
-[source,bash]
-----
-rustc main.rs
-----
-
-Esto genera un ejecutable en el directorio actual.
-
-=== Ejecutar el binario generado
-
-.*En Windows:*
-[source,powershell]
-----
-.\main.exe
-----
-
-.*En Linux/macOS:*
-[source,bash]
-----
-./main
-----
-
-.*Resultado esperado:*
-[source,text]
-----
-Hello, world!
-----
-
-WARNING: Compilar con `rustc` directamente es útil para aprender, pero para proyectos reales *siempre usa Cargo*. Cargo gestiona dependencias, optimizaciones y estructura del proyecto automáticamente.
-
-'''
-
-== Compilar y Ejecutar con Cargo
-
-=== Comando principal: `cargo run`
-
-Dentro de la carpeta del proyecto, compila y ejecuta en un solo paso:
+==== Compilar y ejecutar en un solo paso
 
 [source,bash]
 ----
 cargo run
 ----
 
-.*Salida típica:*
+.*Salida típica en la primera ejecución:*
 [source,text,linenums]
 ----
-   Compiling mundorust v0.1.0 (D:\VNC\RUST\mundorust)  // <1>
+   Compiling hola_mundo v0.1.0 (/ruta/hola_mundo)  // <1>
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.42s  // <2>
-     Running `target\debug\mundorust.exe`  // <3>
+     Running `target/debug/hola_mundo`  // <3>
 Hello, world!  // <4>
 ----
 <1> Cargo compila el proyecto (solo la primera vez o si hay cambios)
-<2> Perfil de compilación usado: `dev` (desarrollo, sin optimizaciones)
+<2> Perfil de compilación: `dev` (desarrollo, sin optimizaciones)
 <3> Ruta del ejecutable que se está ejecutando
 <4> Output de tu programa
 
 [TIP]
 ====
-Si no modificaste el código, la segunda vez que ejecutes `cargo run` será instantáneo:
+Si no modificaste el código, la segunda ejecución será instantánea:
 
 [source,text]
 ----
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
-     Running `target\debug\mundorust.exe`
+     Running `target/debug/hola_mundo`
 Hello, world!
 ----
 
 Cargo solo recompila lo que cambió (*compilación incremental*).
 ====
 
-=== Solo compilar: `cargo build`
-
-Útil para verificar que el proyecto compila sin ejecutarlo:
+==== Solo compilar (sin ejecutar)
 
 [source,bash]
 ----
@@ -221,23 +200,45 @@ El binario se genera en `target/debug/`:
 |Ubicación del ejecutable
 
 |Windows
-|`target\debug\mundorust.exe`
+|`target\debug\hola_mundo.exe`
 
 |Linux/macOS
-|`target/debug/mundorust`
+|`target/debug/hola_mundo`
 |===
 
-Puedes ejecutarlo manualmente después:
+Puedes ejecutarlo manualmente:
 
 [source,bash]
 ----
-./target/debug/mundorust  # Linux/macOS
-.\target\debug\mundorust.exe  # Windows
+# Linux/macOS
+./target/debug/hola_mundo
+
+# Windows
+.\target\debug\hola_mundo.exe
 ----
+
+=== Opción 2: Con rustc (Solo para aprendizaje)
+
+Para pruebas rápidas o aprendizaje, puedes compilar directamente con `rustc`:
+
+[source,bash]
+----
+# Compilar main.rs
+rustc src/main.rs
+
+# Ejecutar el binario generado
+# Windows
+.\main.exe
+
+# Linux/macOS
+./main
+----
+
+WARNING: Compilar con `rustc` directamente es útil para aprender, pero para proyectos reales *siempre usa Cargo*. Cargo gestiona dependencias, optimizaciones y estructura del proyecto automáticamente.
 
 '''
 
-== Comandos de Desarrollo
+== 🛠️ Comandos Esenciales de Desarrollo
 
 === Verificación rápida: `cargo check`
 
@@ -248,6 +249,7 @@ El comando más rápido durante el desarrollo:
 cargo check
 ----
 
+.Comparación
 [cols="1,1", options="header"]
 |===
 |`cargo build`
@@ -283,6 +285,7 @@ fn main() {
 ----
 <1> ¡Falta el punto y coma!
 
+.Mensaje de error
 [source,text]
 ----
 error: expected `;`, found `println`
@@ -294,9 +297,18 @@ error: expected `;`, found `println`
   |     ^^^^^^^ expected `;`
 ----
 
-=== Limpiar compilaciones: `cargo clean`
+=== Ejecutar con argumentos
 
-Elimina todos los archivos generados en `target/`:
+[source,bash]
+----
+# Pasar argumentos al programa
+cargo run -- arg1 arg2 arg3
+
+# Ejemplo práctico
+cargo run -- --help
+----
+
+=== Limpiar archivos compilados
 
 [source,bash]
 ----
@@ -313,9 +325,9 @@ NOTE: Después de `cargo clean`, la próxima compilación será más lenta porqu
 
 '''
 
-== Compilación para Producción
+== 🚀 Compilación para Producción
 
-=== Release build: `cargo build --release`
+=== Modo Release
 
 Cuando necesites un binario optimizado para distribuir:
 
@@ -338,7 +350,7 @@ El ejecutable optimizado se genera en `target/release/`.
 |Máxima (O3, LTO opcional)
 
 |*Velocidad de ejecución*
-|Puede ser 10-100x más lenta
+|10-100x más lenta
 |Máximo rendimiento
 
 |*Tamaño del binario*
@@ -371,183 +383,66 @@ Debug:   Procesó 1M elementos en 850ms
 Release: Procesó 1M elementos en 12ms  (70x más rápido!)
 ----
 
-'''
-
-== Resumen de Comandos Cargo
-
-.Comandos esenciales de Cargo
-[cols="2,3,3", options="header"]
-|===
-|Comando
-|Uso principal
-|Cuándo usarlo
-
-|`cargo new <name>`
-|Crea un nuevo proyecto con estructura básica
-|Inicio de cualquier proyecto
-
-|`cargo run`
-|Compila y ejecuta en un paso
-|Desarrollo diario, pruebas rápidas
-
-|`cargo build`
-|Solo compila (sin ejecutar)
-|Verificar código sin correrlo
-
-|`cargo check`
-|Chequea errores de sintaxis/tipos (muy rápido)
-|Iteración constante mientras editas
-
-|`cargo clean`
-|Borra archivos generados en `target/`
-|Liberar espacio o recompilar limpio
-
-|`cargo build --release`
-|Compila optimizado para producción
-|Distribuir o medir rendimiento real
-
-|`cargo test`
-|Ejecuta tests del proyecto
-|Desarrollo basado en tests (TDD)
-
-|`cargo doc --open`
-|Genera y abre documentación
-|Consultar docs de dependencias
-|===
-
-TIP: Ejecuta `cargo --help` para ver todos los comandos disponibles, o `cargo <comando> --help` para ayuda específica.
-
-'''
-
-== Flujo de Trabajo Típico
-
-=== Desarrollo día a día
-
-[source,bash,linenums]
-----
-# 1. Crear proyecto
-cargo new mi_app
-
-# 2. Entrar al proyecto
-cd mi_app
-
-# 3. Editar código en src/main.rs
-# ... (usar tu editor favorito)
-
-# 4. Verificar errores (muy rápido)
-cargo check
-
-# 5. Compilar y ejecutar
-cargo run
-
-# 6. Repetir pasos 3-5 hasta terminar
-
-# 7. Compilar versión optimizada final
-cargo build --release
-----
-
-=== Añadir dependencias
+=== Ejecutar en modo release
 
 [source,bash]
 ----
-# Opción 1: Editar Cargo.toml manualmente
-# Agregar: rand = "0.8"
-
-# Opción 2: Usar cargo add (Rust 1.62+)
-cargo add rand
-----
-
-Cargo descarga automáticamente las dependencias la próxima vez que compiles.
-
-'''
-
-
-=== Compilación optimizada para producción
-
-[source,bash]
-----
-cargo build --release
-----
-
-.*Diferencias clave:*
-[cols="1,2,2,1,1", options="header"]
-|===
-|Modo
-|Comando
-|Ubicación
-|Velocidad
-|Optimización
-
-|*Debug*
-|`cargo build`
-|`target/debug/`
-|Rápida
-|No
-
-|*Release*
-|`cargo build --release`
-|`target/release/`
-|Lenta
-|Sí
-|===
-
-TIP: Usa `--release` solo cuando necesites máximo rendimiento (producción, benchmarks).
-
-=== Mas compilaciones
-
-[source,bash]
-----
-# Con argumentos
-cargo run -- arg1 arg2
-
-# En modo release
 cargo run --release
 ----
 
-=== Dependencias Avanzadas
+'''
 
-.*Formato básico:*
-[source,toml]
+== 📦 Gestión de Dependencias
+
+=== Añadir una dependencia
+
+Existen dos formas:
+
+==== Opción 1: Editar `Cargo.toml` manualmente
+
+.Ejemplo: Añadir la librería `rand`
+[source,toml,linenums,highlight=7-8]
 ----
+[package]
+name = "hola_mundo"
+version = "0.1.0"
+edition = "2021"
+
 [dependencies]
-serde = "1.0"
-tokio = "1.35"
+rand = "0.8"  # <1>
+serde = { version = "1.0", features = ["derive"] }  # <2>
+----
+<1> Librería para generar números aleatorios
+<2> Librería de serialización con características adicionales
+
+==== Opción 2: Usar `cargo add` (Rust 1.62+)
+
+[source,bash]
+----
+# Añadir dependencia
+cargo add rand
+
+# Añadir con features específicas
+cargo add serde --features derive
 ----
 
-.*Con características específicas:*
-[source,toml]
-----
-[dependencies]
-tokio = { version = "1.35", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
-----
+[TIP]
+====
+`cargo add` es más conveniente y actualiza automáticamente `Cargo.toml` con la última versión compatible.
+====
 
-.*Desde Git:*
-[source,toml]
-----
-[dependencies]
-mi_lib = { git = "https://github.com/usuario/repo" }
-----
-
-.*Dependencias locales:*
-[source,toml]
-----
-[dependencies]
-mi_lib = { path = "../mi_lib" }
-----
-
-=== Versiones y semántica
+=== Versionado Semántico
 
 Cargo usa https://semver.org/[Semantic Versioning]:
 
 [source,toml]
 ----
 [dependencies]
+# Compatible (recomendado) - permite 1.0.x, 1.1.x, etc.
+serde = "1.0"  # <1>
+
 # Exacta
 serde = "=1.0.195"
-
-# Compatible (recomendado) - permite 1.0.x
-serde = "1.0"
 
 # Rango
 serde = ">=1.0, <2.0"
@@ -555,10 +450,19 @@ serde = ">=1.0, <2.0"
 # Última versión (NO recomendado en producción)
 serde = "*"
 ----
+<1> Equivalente a `"^1.0"` (permite actualizaciones compatibles, pero NO 2.0)
 
-WARNING: `"1.0"` es equivalente a `"^1.0"` (caret), que permite actualizaciones compatibles (1.0.x, 1.1.x, etc.), pero NO 2.0.
+=== Tipos de dependencias
 
-=== Dependencias de desarrollo
+==== Dependencias normales
+
+[source,toml]
+----
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+----
+
+==== Dependencias de desarrollo
 
 Para testing y herramientas de desarrollo:
 
@@ -570,6 +474,22 @@ proptest = "1.4"   # Para property testing
 ----
 
 Estas *NO* se incluyen en la compilación final del binario.
+
+==== Dependencias desde Git
+
+[source,toml]
+----
+[dependencies]
+mi_lib = { git = "https://github.com/usuario/repo" }
+----
+
+==== Dependencias locales
+
+[source,toml]
+----
+[dependencies]
+mi_lib = { path = "../mi_lib" }
+----
 
 === Actualizar dependencias
 
@@ -610,7 +530,7 @@ cargo test -- --nocapture
 # Generar y abrir documentación
 cargo doc --open
 
-# Incluir dependencias
+# Incluir documentación privada
 cargo doc --open --document-private-items
 ----
 
@@ -634,7 +554,7 @@ cargo publish
 
 '''
 
-== 📁 Estructura del Proyecto
+== 📁 Estructura Completa de un Proyecto
 
 ----
 mi_proyecto/
@@ -666,7 +586,9 @@ Esto garantiza builds reproducibles en aplicaciones.
 
 == 💡 Tips y Mejores Prácticas
 
-=== 1. Usa alias en `~/.cargo/config.toml`
+=== 1. Alias personalizados
+
+Crea `~/.cargo/config.toml`:
 
 [source,toml]
 ----
@@ -677,25 +599,16 @@ t = "test"
 c = "check"
 ----
 
-Ahora puedes usar: `cargo c` en lugar de `cargo check`
+Ahora: `cargo c` en lugar de `cargo check`
 
-=== 2. Compilación incremental
-
-Cargo compila solo lo que cambió. Para forzar recompilación completa:
-
-[source,bash]
-----
-cargo clean && cargo build
-----
-
-=== 3. Perfiles de compilación personalizados
+=== 2. Perfiles de compilación personalizados
 
 En `Cargo.toml`:
 
 [source,toml]
 ----
 [profile.dev]
-opt-level = 0  # Sin optimización (rápido)
+opt-level = 0  # Sin optimización (rápido de compilar)
 
 [profile.release]
 opt-level = 3     # Máxima optimización
@@ -703,7 +616,7 @@ lto = true        # Link-Time Optimization
 codegen-units = 1 # Mejor optimización, compilación más lenta
 ----
 
-=== 4. Características opcionales
+=== 3. Características opcionales
 
 [source,toml]
 ----
@@ -724,7 +637,35 @@ cargo build --features "feature2"
 
 '''
 
-== 🎯 Cheat Sheet
+== 🎯 Flujo de Trabajo Recomendado
+
+.Desarrollo día a día
+[source,bash,linenums]
+----
+# 1. Crear proyecto
+cargo new mi_app && cd mi_app
+
+# 2. Editar código en src/main.rs
+# (usar tu editor favorito)
+
+# 3. Verificar errores rápidamente
+cargo check
+
+# 4. Compilar y ejecutar
+cargo run
+
+# 5. Repetir pasos 2-4 hasta terminar
+
+# 6. Tests (si los hay)
+cargo test
+
+# 7. Compilar versión optimizada final
+cargo build --release
+----
+
+'''
+
+== 📊 Cheat Sheet de Comandos
 
 [cols="2,3", options="header"]
 |===
@@ -732,35 +673,40 @@ cargo build --features "feature2"
 |Descripción
 
 |`cargo new <nombre>`
-|Crear proyecto
+|Crear proyecto nuevo
 
 |`cargo build`
-|Compilar (debug)
+|Compilar en modo debug
 
 |`cargo build --release`
-|Compilar (optimizado)
+|Compilar optimizado para producción
 
 |`cargo run`
 |Compilar y ejecutar
 
+|`cargo run --release`
+|Ejecutar versión optimizada
+
 |`cargo check`
-|Verificar sin compilar
+|Verificar errores sin compilar
 
 |`cargo test`
 |Ejecutar tests
 
 |`cargo clean`
-|Limpiar target/
+|Limpiar archivos compilados
 
 |`cargo update`
 |Actualizar dependencias
 
 |`cargo doc --open`
-|Generar documentación
+|Generar y abrir documentación
 
 |`cargo add <crate>`
-|Añadir dependencia (Rust 1.62+)
+|Añadir dependencia
 |===
+
+TIP: Ejecuta `cargo --help` para ver todos los comandos, o `cargo <comando> --help` para ayuda específica.
 
 '''
 
@@ -775,12 +721,9 @@ cargo build --features "feature2"
 
 [quote, Rust Community]
 ____
-🦀 *Recuerda*: Cargo es tu mejor amigo en Rust. Aprende a dominarlo y tu productividad se multiplicará.
+🦀 *Recuerda*: Cargo es tu mejor amigo en Rust.
+
+Aprende a dominarlo y tu productividad se multiplicará. Cargo será tu compañero constante en este viaje de aprendizaje.
 ____
 
-____
-🎉 ¡Felicitaciones! Has compilado tu primer programa en Rust. +
-Cargo será tu compañero constante en este viaje. Aprende a dominarlo y serás mucho más productivo.
-____
-
-*Siguiente tema*:  →
+*Siguiente tema*: Variables y Mutabilidad (`let` y `let mut`) →
