@@ -21,7 +21,7 @@
 
 > **"El aprendizaje puede ser empinado al principio, pero vale la pena. Rust te hará un mejor programador en cualquier lenguaje."**
 
-Este es un curso **completo y moderno de Rust para 2026**, creado con 💙 por la comunidad de **Rust Perú** 🇵🇪. Cubre desde la instalación hasta temas avanzados como:
+Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por la comunidad de **Rust Perú**. Cubre desde la instalación hasta temas avanzados como:
 
 - ⚡ Async/Await y programación asíncrona
 - 🔧 Macros procedurales
@@ -29,7 +29,7 @@ Este es un curso **completo y moderno de Rust para 2026**, creado con 💙 por l
 - 🏗️ Arquitectura de sistemas
 - 🚀 Optimización y rendimiento
 
-**Tiempo estimado:** 4-6 meses (con dedicación diaria)  
+**Tiempo estimado:** 4-6 meses
 **Nivel:** De principiante a experto  
 **Idioma:** Español 🇪🇸
 
@@ -48,7 +48,7 @@ Este es un curso **completo y moderno de Rust para 2026**, creado con 💙 por l
 
 ---
 
-## 🇵🇪 Sobre Rust Perú
+## Sobre Rust Perú
 
 Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y el uso de Rust en nuestro país. Nuestra misión es facilitar el acceso a recursos educativos de calidad y compartir conocimientos para que todos puedan disfrutar de la potencia y seguridad de Rust.
 
@@ -69,167 +69,15 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 
 ---
 
-## 🗺️ Estructura del Curso
+## 📋 Roadmap del Proyecto
 
-El curso está dividido en **4 niveles progresivos**:
-
-### 🌱 Nivel Principiante (Módulos 0-3)
-**Duración:** 3-4 semanas
-
-```
-📦 Módulo 0: Preparación y Fundamentos
-├── Instalación de Rust y Cargo
-├── Primer programa: Hello, World!
-├── Estructura de proyectos
-└── Herramientas esenciales
-
-📝 Módulo 1: Sintaxis Básica y Tipos
-├── Variables y mutabilidad
-├── Tipos de datos
-├── String vs &str
-└── Comentarios y documentación
-
-🔒 Módulo 2: Ownership y Borrowing ⭐
-├── Stack vs Heap
-├── Reglas de ownership
-├── Borrowing y referencias
-├── Lifetimes
-└── Smart pointers básicos
-
-🔄 Módulo 3: Control de Flujo y Funciones
-├── Condicionales (if, match)
-├── Bucles (loop, while, for)
-├── Funciones y closures
-└── Genéricos básicos
-```
-
-### 🌿 Nivel Intermedio (Módulos 4-7)
-**Duración:** 4-6 semanas
-
-```
-🏗️ Módulo 4: Estructuras y Enumeraciones
-├── Structs y métodos
-├── Enums y pattern matching
-├── Option<T> y Result<T, E>
-└── Traits básicos
-
-📦 Módulo 5: Colecciones y Tipos Avanzados
-├── Vec, HashMap, HashSet
-├── Iteradores
-├── Type aliases
-└── Traits de conversión
-
-⚠️ Módulo 6: Gestión de Errores Avanzada
-├── Custom error types
-├── thiserror y anyhow
-├── Propagación con ?
-└── Best practices
-
-📂 Módulo 7: Modularidad y Organización
-├── Sistema de módulos
-├── Visibilidad (pub, pub(crate))
-├── Workspaces
-└── Crates y dependencias
-```
-
-### 🌳 Nivel Avanzado (Módulos 8-11)
-**Duración:** 6-8 semanas
-
-```
-🎯 Módulo 8: Traits Avanzados
-├── Associated types
-├── Trait objects (dyn)
-├── Supertraits
-└── Operator overloading
-
-⏱️ Módulo 9: Lifetimes Avanzados
-├── Multiple lifetimes
-├── HRTB (Higher-Rank Trait Bounds)
-└── Variance
-
-🔀 Módulo 10: Concurrencia
-├── Threads y channels
-├── Arc, Mutex, RwLock
-├── Atomic types
-└── Send y Sync
-
-⚡ Módulo 11: Async/Await ⭐
-├── Futures y async/await
-├── Tokio runtime
-├── Async I/O
-└── Streams
-```
-
-### 🔥 Nivel Experto (Módulos 12-15)
-**Duración:** 4-6 semanas
-
-```
-🔧 Módulo 12: Macros
-├── Macros declarativas
-├── Macros derivadas
-└── Attribute macros
-
-⚠️ Módulo 13: Unsafe Rust y FFI
-├── Raw pointers
-├── Unsafe superpowers
-├── FFI con C/C++
-└── Binding generation
-
-🧪 Módulo 14: Testing y Debugging
-├── Unit y integration tests
-├── Property-based testing
-├── Benchmarking con Criterion
-└── Profiling
-
-🚀 Módulo 15: Optimización y Arquitectura
-├── Performance tuning
-├── Binary size optimization
-├── Design patterns
-└── WebAssembly y Embedded
-```
-
----
-
-## 🚀 Cómo Empezar
-
-### 1️⃣ Instala Rust
-
-```bash
-# Linux y macOS
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Windows
-# Descarga rustup-init.exe desde https://rustup.rs/
-```
-
-### 2️⃣ Verifica la Instalación
-
-```bash
-rustc --version
-cargo --version
-```
-
-### 3️⃣ Comienza con el Módulo 0
-
-```bash
-# Clona este repositorio
-git clone https://github.com/rustperu/curso-rust-2026.git
-cd curso-rust-2026
-
-# Navega al Módulo 0
-cd basico/modulo-00-instalacion
-
-# Lee el material
-cat README.md
-```
-
-### 4️⃣ Tu Primer Proyecto
-
-```bash
-cargo new hola_mundo
-cd hola_mundo
-cargo run
-```
+- [x] Módulos 0-3: Fundamentos
+- [x] Módulos 4-7: Nivel Intermedio
+- [ ] Módulos 8-11: Nivel Avanzado (En progreso)
+- [ ] Módulos 12-15: Nivel Experto (Planeado)
+- [ ] Videos tutoriales para cada módulo
+- [ ] Ejercicios prácticos con soluciones
+- [ ] Proyectos finales por nivel
 
 ---
 
@@ -290,7 +138,7 @@ cargo run
 
 1. 📖 **Lee el mensaje de error completo** - Rust es muy descriptivo
 2. 🔍 **Busca en la documentación oficial**
-3. 💬 **Pregunta en nuestra comunidad** (enlaces abajo)
+3. 💬 **Pregunta en nuestra comunidad**
 4. 🧪 **Usa [Rust Playground](https://play.rust-lang.org/)** para experimentar
 5. 🎯 **Simplifica el problema** a un caso mínimo reproducible
 
@@ -298,34 +146,6 @@ cargo run
 
 ## 👥 Comunidad y Soporte
 
-### 🌐 Rust Perú
-
-<table>
-<tr>
-<td align="center">
-  <a href="https://rust.pe/">
-    <img src="https://img.shields.io/badge/Website-rust.pe-orange?style=for-the-badge&logo=rust" alt="Website">
-  </a>
-</td>
-<td align="center">
-  <a href="https://www.youtube.com/@RustLangPeru">
-    <img src="https://img.shields.io/badge/YouTube-RustLangPeru-red?style=for-the-badge&logo=youtube" alt="YouTube">
-  </a>
-</td>
-</tr>
-<tr>
-<td align="center">
-  <a href="https://www.linkedin.com/company/rustperu/posts/?feedView=all">
-    <img src="https://img.shields.io/badge/LinkedIn-Rust_Perú-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn">
-  </a>
-</td>
-<td align="center">
-  <a href="https://github.com/rustperu">
-    <img src="https://img.shields.io/badge/GitHub-rustperu-black?style=for-the-badge&logo=github" alt="GitHub">
-  </a>
-</td>
-</tr>
-</table>
 
 ### 💬 Únete a Telegram
 
@@ -384,7 +204,6 @@ Este proyecto sigue el [Código de Conducta de Rust](https://www.rust-lang.org/p
 - [ ] Videos tutoriales para cada módulo
 - [ ] Ejercicios prácticos con soluciones
 - [ ] Proyectos finales por nivel
-- [ ] Certificado de completitud (futuro)
 
 ---
 
@@ -409,7 +228,6 @@ Un agradecimiento especial a:
 
 ¿Tienes preguntas o sugerencias? ¡Contáctanos!
 
-- 📧 Email: contacto@rust.pe *(si tienes email comunitario)*
 - 🌐 Website: [rust.pe](https://rust.pe/)
 - 💼 LinkedIn: [Rust Perú](https://www.linkedin.com/company/rustperu/)
 
@@ -426,7 +244,7 @@ Un agradecimiento especial a:
 
 **Hecho con ❤️ por [Rust Perú](https://rust.pe/) 🇵🇪**
 
-*"Fighting the borrow checker makes you a better developer."* 🦀
+*"Un simple código cambia el mundo y aprenderlo es crear al mundo que soñamos."* 🦀
 
 [⬆️ Volver arriba](#-curso-completo-de-rust-2026)
 
