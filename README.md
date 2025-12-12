@@ -111,18 +111,6 @@ cargo run
 
 ---
 
-## 📋 Roadmap del Proyecto
-
-- [x] Módulos 0-3: Fundamentos
-- [x] Módulos 4-7: Nivel Intermedio
-- [ ] Módulos 8-11: Nivel Avanzado (En progreso)
-- [ ] Módulos 12-15: Nivel Experto (Planeado)
-- [ ] Videos tutoriales para cada módulo
-- [ ] Ejercicios prácticos con soluciones
-- [ ] Proyectos finales por nivel
-
----
-
 ## 💪 Recursos de Práctica
 
 ### Plataformas Recomendadas

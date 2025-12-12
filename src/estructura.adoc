@@ -9,18 +9,6 @@
 :sectnums:
 :experimental:
 
-[abstract]
-.Sobre Esta Ruta
-====
-Esta es una ruta de aprendizaje completa y moderna de Rust para 2026, creada por la comunidad de *Rust Perú* 🇵🇪.
-
-Cubre desde la instalación hasta temas avanzados como async, macros procedurales, unsafe, FFI y arquitectura de sistemas.
-
-*Tiempo estimado*: 4-6 meses (dedicación diaria) +
-*Nivel final*: Experto en Rust +
-*Idioma*: Español
-====
-
 '''
 
 [.text-center]
@@ -128,6 +116,13 @@ Construirás tu primer proyecto y aprenderás:
 * `String` vs `&str`
 * Conversión entre tipos
 * Métodos comunes de String
+
+=== Vector
+
+* Creación: `vec![]`, `Vec::new()`
+* Métodos: `push`, `pop`, `len`
+* Acceso: indexing vs `get()`
+* Iteración sobre vectores
 
 === Conceptos de Memoria
 
@@ -269,19 +264,6 @@ IMPORTANT: Ownership es el concepto MÁS IMPORTANTE de Rust. Dedica tiempo a ent
 * Enums complejos
 * Métodos en enums
 
-=== Option<T>
-
-* Representación de valores opcionales
-* `Some(T)` y `None`
-* Métodos útiles: `unwrap`, `unwrap_or`, `map`
-* Pattern matching con `Option`
-
-=== Vec<T> (Vector)
-
-* Creación: `vec![]`, `Vec::new()`
-* Métodos: `push`, `pop`, `len`
-* Acceso: indexing vs `get()`
-* Iteración sobre vectores
 
 '''
 
