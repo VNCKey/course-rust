@@ -11,7 +11,7 @@
 [![Community](https://img.shields.io/badge/Community-Rust_Perú-red?style=for-the-badge&logo=rust)](https://rust.pe/)
 [![Nivel](https://img.shields.io/badge/Nivel-Todos-green?style=for-the-badge)]()
 
-[🌐 Website](https://rust.pe/) • [📺 YouTube](https://www.youtube.com/@RustLangPeru) • [💼 LinkedIn](https://www.linkedin.com/company/rustperu/posts/?feedView=all) • [🐙 GitHub](https://github.com/rustperu) • [💬 Telegram](#únete-a-telegram)
+[🌐 Website](https://rust.pe/) • [📺 YouTube](https://www.youtube.com/@RustLangPeru) • [💼 LinkedIn](https://www.linkedin.com/company/rustperu/posts/?feedView=all) • [🐙 GitHub](https://github.com/rustperu) • [💬 Telegram](#-únete-a-telegram)
 
 </div>
 
@@ -21,7 +21,7 @@
 
 > **"El aprendizaje puede ser empinado al principio, pero vale la pena. Rust te hará un mejor programador en cualquier lenguaje."**
 
-Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por la comunidad de **Rust Perú**. Cubre desde la instalación hasta temas avanzados como:
+Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por la comunidad de **Rust Perú** 🇵🇪. Cubre desde la instalación hasta temas avanzados como:
 
 - ⚡ Async/Await y programación asíncrona
 - 🔧 Macros procedurales
@@ -29,7 +29,7 @@ Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por l
 - 🏗️ Arquitectura de sistemas
 - 🚀 Optimización y rendimiento
 
-**Tiempo estimado:** 4-6 meses
+**Tiempo estimado:** 4-6 meses  
 **Nivel:** De principiante a experto  
 **Idioma:** Español 🇪🇸
 
@@ -47,7 +47,7 @@ Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por l
 
 ---
 
-## Sobre Rust Perú
+## 🇵🇪 Sobre Rust Perú
 
 Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y el uso de Rust en nuestro país. Nuestra misión es facilitar el acceso a recursos educativos de calidad y compartir conocimientos para que todos puedan disfrutar de la potencia y seguridad de Rust.
 
@@ -65,6 +65,49 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 - 📖 **Educación:** Contenido gratuito y de calidad
 - 🌍 **Comunidad:** Aprendemos y crecemos juntos
 - 🔓 **Open Source:** Todo nuestro material es de código abierto
+
+---
+
+## 🚀 Cómo Empezar
+
+### 1️⃣ Instala Rust
+
+```bash
+# Linux y macOS
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Windows
+# Descarga rustup-init.exe desde https://rustup.rs/
+```
+
+### 2️⃣ Verifica la Instalación
+
+```bash
+rustc --version
+cargo --version
+```
+
+### 3️⃣ Comienza con el Módulo 0
+
+```bash
+# Clona este repositorio
+git clone https://github.com/rustperu/curso-rust-2026.git
+cd curso-rust-2026
+
+# Navega al Módulo 0
+cd basico/modulo-00-instalacion
+
+# Lee el material
+cat README.md
+```
+
+### 4️⃣ Tu Primer Proyecto
+
+```bash
+cargo new hola_mundo
+cd hola_mundo
+cargo run
+```
 
 ---
 
@@ -118,7 +161,7 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 ### Hábitos Productivos
 
 ✅ **Documenta tu código** con `///` y `//!`  
-✅ **Lee los mensajes de error completos** (Rust tiene los mejores)  
+✅ **Lee los mensajes de error completos** (Rust tiene los mejores)
 
 ### Cuando Te Atores 🆘
 
@@ -131,7 +174,6 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 ---
 
 ## 👥 Comunidad y Soporte
-
 
 ### 💬 Únete a Telegram
 
@@ -159,6 +201,7 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 
 ¡Las contribuciones son bienvenidas! 🎉
 
+### Áreas Donde Puedes Ayudar
 
 - 📝 Mejora o corrige contenido existente
 - ➕ Agrega nuevos ejercicios o ejemplos
@@ -170,7 +213,11 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 
 Este proyecto sigue el [Código de Conducta de Rust](https://www.rust-lang.org/policies/code-of-conduct). Por favor, sé respetuoso y acogedor con todos los miembros de la comunidad.
 
+---
 
+## 📜 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
@@ -179,6 +226,7 @@ Este proyecto sigue el [Código de Conducta de Rust](https://www.rust-lang.org/p
 Un agradecimiento especial a:
 
 - 🦀 **The Rust Team** por crear un lenguaje increíble
+- 🇵🇪 **La comunidad Rust Perú** por su apoyo y contribuciones
 - 🌍 **La comunidad global de Rust** por su documentación y recursos
 
 ---
