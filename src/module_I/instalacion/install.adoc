@@ -334,7 +334,7 @@ instalacion.pdf     # Versión para imprimir
 * 💬 https://users.rust-lang.org/[Foro de la comunidad Rust]
 * 🦀 https://doc.rust-lang.org/book/[The Rust Programming Language Book]
 
-'''
+
 
 [quote, Rust Community]
 ____
