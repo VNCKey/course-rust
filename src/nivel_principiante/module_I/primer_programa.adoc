@@ -8,26 +8,6 @@
 :sectnums:
 :experimental:
 
-== Instalación de Rust
-
-=== Linux / macOS
-[source,bash]
-----
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source ~/.cargo/env   # recarga PATH
-----
-
-=== Windows
-1. Instala *Build Tools for Visual Studio* (MSVC).
-2. Descarga `rustup-init.exe` desde https://rustup.rs y ejecuta.
-
-=== Verificación
-[source,bash]
-----
-rustc --version
-cargo --version
-----
-
 == ¿Qué es Cargo?
 
 Cargo es el **sistema de compilación y gestor de paquetes** oficial de Rust:
