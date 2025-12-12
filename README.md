@@ -3,5 +3,5 @@
 </p>
 
 <p align="center">
-  <img src="assets/qr.svg" width="200" alt="Logo Course Rust">
+  <img src="assets/qr.png" width="200" alt="Logo Course Rust">
 </p>
