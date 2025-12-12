@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="assets/logo.svg" width="200" alt="Logo Course Rust">
+  <img src="assets/rust-peru.png" width="200" alt="Logo Course Rust">
 </p>
