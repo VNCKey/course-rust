@@ -38,7 +38,6 @@ Este es un curso **completo y moderno de Rust para 2026**, creado con 🧡 por l
 ## 📚 Tabla de Contenidos
 
 - [Sobre Rust Perú](#-sobre-rust-perú)
-- [Estructura del Curso](#-estructura-del-curso)
 - [Cómo Empezar](#-cómo-empezar)
 - [Recursos de Práctica](#-recursos-de-práctica)
 - [Consejos y Mejores Prácticas](#-consejos-y-mejores-prácticas)
@@ -114,25 +113,12 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 
 > 💪 **Practica todos los días**, aunque sea 30 minutos. La consistencia es clave.
 
-> 📖 **Lee código de otros**. Explora crates populares en [crates.io](https://crates.io/).
-
 > 🤝 **No tengas miedo del borrow checker**. Es tu amigo, te está enseñando mejores prácticas.
-
-> 🔍 **Usa Clippy**. Te ayuda a escribir código idiomático:
-> ```bash
-> cargo clippy
-> ```
-
-> ⚠️ **No uses `unwrap()` en producción**. Maneja errores apropiadamente con `Result` y `Option`.
 
 ### Hábitos Productivos
 
-✅ **Escribe tests desde el principio** con `cargo test`  
 ✅ **Documenta tu código** con `///` y `//!`  
-✅ **Formatea automáticamente** con `cargo fmt`  
-✅ **Ejecuta clippy regularmente** para sugerencias  
 ✅ **Lee los mensajes de error completos** (Rust tiene los mejores)  
-✅ **Contribuye a proyectos open source** cuando te sientas listo
 
 ### Cuando Te Atores 🆘
 
@@ -173,43 +159,18 @@ Somos la **comunidad de Rust Perú** 🦀, dedicada a promover el aprendizaje y 
 
 ¡Las contribuciones son bienvenidas! 🎉
 
-### Cómo Contribuir
-
-1. 🍴 **Fork** este repositorio
-2. 🌿 **Crea una rama** para tu feature (`git checkout -b feature/nueva-leccion`)
-3. 💾 **Commit** tus cambios (`git commit -m 'Agrega nueva lección sobre macros'`)
-4. 📤 **Push** a la rama (`git push origin feature/nueva-leccion`)
-5. 🎯 **Abre un Pull Request**
-
-### Áreas Donde Puedes Ayudar
 
 - 📝 Mejora o corrige contenido existente
 - ➕ Agrega nuevos ejercicios o ejemplos
 - 🐛 Reporta errores o typos
-- 🌍 Traduce contenido (si aplica)
+- 🌍 Traduce contenido
 - 💡 Sugiere mejoras en la estructura
 
 ### Código de Conducta
 
 Este proyecto sigue el [Código de Conducta de Rust](https://www.rust-lang.org/policies/code-of-conduct). Por favor, sé respetuoso y acogedor con todos los miembros de la comunidad.
 
----
 
-## 📋 Roadmap del Proyecto
-
-- [x] Módulos 0-3: Fundamentos
-- [x] Módulos 4-7: Nivel Intermedio
-- [ ] Módulos 8-11: Nivel Avanzado (En progreso)
-- [ ] Módulos 12-15: Nivel Experto (Planeado)
-- [ ] Videos tutoriales para cada módulo
-- [ ] Ejercicios prácticos con soluciones
-- [ ] Proyectos finales por nivel
-
----
-
-## 📜 Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
@@ -218,8 +179,6 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE)
 Un agradecimiento especial a:
 
 - 🦀 **The Rust Team** por crear un lenguaje increíble
-- 🇵🇪 **La comunidad Rust Perú** por su apoyo y contribuciones
-- 👥 **Todos los contribuidores** que hacen posible este proyecto
 - 🌍 **La comunidad global de Rust** por su documentación y recursos
 
 ---
