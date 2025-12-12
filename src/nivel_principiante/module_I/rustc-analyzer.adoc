@@ -8,9 +8,7 @@
 :sectnums:
 :experimental:
 
-[abstract]
-.Sobre este documento
-====
+
 Esta guía explica dos herramientas fundamentales del ecosistema Rust: *rustc* (el compilador) y *rust-analyzer* (el servidor de lenguaje).
 
 Entender estas herramientas te ayudará a:
