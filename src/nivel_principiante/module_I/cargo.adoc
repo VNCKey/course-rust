@@ -31,7 +31,7 @@ En otros lenguajes, necesitas múltiples herramientas:
 
 '''
 
-== 🚀 Comandos Básicos de Compilación
+== 🚀 Crear y explorar tu primer proyecto
 
 === Crear un nuevo proyecto
 
@@ -39,9 +39,6 @@ En otros lenguajes, necesitas múltiples herramientas:
 ----
 # Crear un proyecto binario (aplicación)
 cargo new mi_proyecto
-
-# Crear un proyecto biblioteca
-cargo new mi_libreria --lib
 ----
 
 .*Estructura generada:*
