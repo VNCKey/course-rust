@@ -1,0 +1,483 @@
+= 👋 Hola Mundo en Rust
+:source-highlighter: rouge
+:rouge-style: monokai
+:icons: font
+:toc: left
+:toclevels: 3
+:toc-title: Contenido
+:sectnums:
+:experimental:
+
+== Introducción
+
+Rust se integra perfectamente con *Cargo*, su herramienta oficial para gestionar proyectos, dependencias y compilaciones. Gracias a Cargo, crear, construir y ejecutar programas se vuelve mucho más sencillo y organizado.
+
+TIP: Cargo es equivalente a `npm` en JavaScript, `pip` en Python o `maven` en Java, pero todo integrado en una sola herramienta.
+
+'''
+
+== Creando tu Primer Proyecto
+
+=== Comando de creación
+
+En la terminal, ejecuta:
+
+[source,bash]
+----
+cargo new mundorust
+----
+
+Este comando crea un nuevo proyecto desde cero con la estructura básica lista para programar.
+
+[source,bash]
+----
+cd mundorust
+----
+
+=== Estructura del proyecto generado
+
+Cargo crea automáticamente esta estructura:
+
+.Árbol de archivos generado
+----
+mundorust/
+├── Cargo.toml      # <1>
+├── .gitignore      # <2>
+└── src/
+    └── main.rs     # <3>
+----
+<1> Archivo de configuración del proyecto (metadatos y dependencias)
+<2> Git configurado automáticamente para ignorar archivos compilados
+<3> Archivo principal que contiene la función `main()`
+
+'''
+
+== Anatomía del Proyecto
+
+=== El archivo `Cargo.toml`
+
+Este es el corazón de tu proyecto. Define metadatos y dependencias:
+
+.Contenido inicial de Cargo.toml
+[source,toml,linenums]
+----
+[package]
+name = "mundorust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Las dependencias van aquí
+----
+
+.*Secciones principales:*
+
+`[package]`::
+Contiene los metadatos del proyecto:
+* `name`: Nombre del proyecto
+* `version`: Versión siguiendo https://semver.org/[Semantic Versioning]
+* `edition`: Edición estable de Rust (actualmente 2021)
+* Opcionalmente: `authors`, `description`, `license`
+
+`[dependencies]`::
+Lista las bibliotecas externas (_crates_) que necesita tu proyecto. Cargo las descarga y gestiona automáticamente.
+
+.Ejemplo con dependencias
+[source,toml,linenums,highlight=7]
+----
+[package]
+name = "mundorust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.8"  # <1>
+serde = { version = "1.0", features = ["derive"] }  # <2>
+----
+<1> Librería para generar números aleatorios
+<2> Librería de serialización con características adicionales
+
+=== El punto de entrada: `main.rs`
+
+El archivo `src/main.rs` contiene el código inicial:
+
+.Contenido de src/main.rs
+[source,rust,linenums]
+----
+fn main() {  // <1>
+    println!("Hello, world!");  // <2>
+}  // <3>
+----
+<1> `fn main()` define la función principal del programa (punto de entrada)
+<2> `println!()` es una *macro* que imprime texto en la consola
+<3> Las llaves `{ }` delimitan el bloque de código de la función
+
+[NOTE]
+====
+*Diferencias clave:*
+
+* `println!` con `!` es una *macro*, no una función
+* Las macros en Rust se expanden en tiempo de compilación
+* `println!` soporta formato de texto similar a `printf` en C
+====
+
+'''
+
+== Compilación Simple sin Cargo
+
+Para pruebas rápidas o aprendizaje, puedes usar el compilador directamente:
+
+[source,bash]
+----
+rustc main.rs
+----
+
+Esto genera un ejecutable en el directorio actual.
+
+=== Ejecutar el binario generado
+
+.*En Windows:*
+[source,powershell]
+----
+.\main.exe
+----
+
+.*En Linux/macOS:*
+[source,bash]
+----
+./main
+----
+
+.*Resultado esperado:*
+[source,text]
+----
+Hello, world!
+----
+
+WARNING: Compilar con `rustc` directamente es útil para aprender, pero para proyectos reales *siempre usa Cargo*. Cargo gestiona dependencias, optimizaciones y estructura del proyecto automáticamente.
+
+'''
+
+== Compilar y Ejecutar con Cargo
+
+=== Comando principal: `cargo run`
+
+Dentro de la carpeta del proyecto, compila y ejecuta en un solo paso:
+
+[source,bash]
+----
+cargo run
+----
+
+.*Salida típica:*
+[source,text,linenums]
+----
+   Compiling mundorust v0.1.0 (D:\VNC\RUST\mundorust)  // <1>
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.42s  // <2>
+     Running `target\debug\mundorust.exe`  // <3>
+Hello, world!  // <4>
+----
+<1> Cargo compila el proyecto (solo la primera vez o si hay cambios)
+<2> Perfil de compilación usado: `dev` (desarrollo, sin optimizaciones)
+<3> Ruta del ejecutable que se está ejecutando
+<4> Output de tu programa
+
+[TIP]
+====
+Si no modificaste el código, la segunda vez que ejecutes `cargo run` será instantáneo:
+
+[source,text]
+----
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target\debug\mundorust.exe`
+Hello, world!
+----
+
+Cargo solo recompila lo que cambió (*compilación incremental*).
+====
+
+=== Solo compilar: `cargo build`
+
+Útil para verificar que el proyecto compila sin ejecutarlo:
+
+[source,bash]
+----
+cargo build
+----
+
+El binario se genera en `target/debug/`:
+
+[cols="1,2", options="header"]
+|===
+|Sistema
+|Ubicación del ejecutable
+
+|Windows
+|`target\debug\mundorust.exe`
+
+|Linux/macOS
+|`target/debug/mundorust`
+|===
+
+Puedes ejecutarlo manualmente después:
+
+[source,bash]
+----
+./target/debug/mundorust  # Linux/macOS
+.\target\debug\mundorust.exe  # Windows
+----
+
+'''
+
+== Comandos de Desarrollo
+
+=== Verificación rápida: `cargo check`
+
+El comando más rápido durante el desarrollo:
+
+[source,bash]
+----
+cargo check
+----
+
+[cols="1,1", options="header"]
+|===
+|`cargo build`
+|`cargo check`
+
+|Compila completamente
+|Solo verifica errores
+
+|Genera ejecutable
+|No genera ejecutable
+
+|~3-10 segundos
+|~0.5-2 segundos
+
+|Uso: antes de ejecutar
+|Uso: mientras editas
+|===
+
+.*¿Cuándo usar `cargo check`?*
+
+* icon:check[] Mientras escribes código
+* icon:check[] Para verificar sintaxis rápidamente
+* icon:check[] Si olvidaste un `;` o cerraste mal una llave `{ }`
+* icon:check[] Antes de hacer commit
+
+.*Ejemplo de error detectado:*
+[source,rust,linenums,highlight=2]
+----
+fn main() {
+    let x = 5  // <1>
+    println!("{}", x);
+}
+----
+<1> ¡Falta el punto y coma!
+
+[source,text]
+----
+error: expected `;`, found `println`
+ --> src/main.rs:3:5
+  |
+2 |     let x = 5
+  |              ^ help: add `;` here
+3 |     println!("{}", x);
+  |     ^^^^^^^ expected `;`
+----
+
+=== Limpiar compilaciones: `cargo clean`
+
+Elimina todos los archivos generados en `target/`:
+
+[source,bash]
+----
+cargo clean
+----
+
+.*¿Cuándo usar?*
+
+* Liberar espacio en disco (la carpeta `target/` puede ocupar cientos de MB)
+* Forzar una recompilación completa desde cero
+* Antes de comprimir/compartir el proyecto
+
+NOTE: Después de `cargo clean`, la próxima compilación será más lenta porque Cargo debe recompilar todo desde cero.
+
+'''
+
+== Compilación para Producción
+
+=== Release build: `cargo build --release`
+
+Cuando necesites un binario optimizado para distribuir:
+
+[source,bash]
+----
+cargo build --release
+----
+
+El ejecutable optimizado se genera en `target/release/`.
+
+.Diferencias entre perfiles
+[cols="1,2,2", options="header"]
+|===
+|
+|Debug (`cargo build`)
+|Release (`cargo build --release`)
+
+|*Optimización*
+|Ninguna (más rápido de compilar)
+|Máxima (O3, LTO opcional)
+
+|*Velocidad de ejecución*
+|Puede ser 10-100x más lenta
+|Máximo rendimiento
+
+|*Tamaño del binario*
+|Más grande (incluye debug info)
+|Más pequeño (stripped)
+
+|*Tiempo de compilación*
+|Rápido (~3-10s)
+|Lento (~10-60s)
+
+|*Debugging*
+|Completo (con símbolos)
+|Limitado
+
+|*Ubicación*
+|`target/debug/`
+|`target/release/`
+
+|*Cuándo usar*
+|Desarrollo diario
+|Producción, distribución, benchmarks
+|===
+
+IMPORTANT: Siempre usa `--release` para medir el rendimiento real de tu código. El modo debug puede ser órdenes de magnitud más lento.
+
+.*Ejemplo de diferencia de rendimiento:*
+[source,text]
+----
+Debug:   Procesó 1M elementos en 850ms
+Release: Procesó 1M elementos en 12ms  (70x más rápido!)
+----
+
+'''
+
+== Resumen de Comandos Cargo
+
+.Comandos esenciales de Cargo
+[cols="2,3,3", options="header"]
+|===
+|Comando
+|Uso principal
+|Cuándo usarlo
+
+|`cargo new <name>`
+|Crea un nuevo proyecto con estructura básica
+|Inicio de cualquier proyecto
+
+|`cargo run`
+|Compila y ejecuta en un paso
+|Desarrollo diario, pruebas rápidas
+
+|`cargo build`
+|Solo compila (sin ejecutar)
+|Verificar código sin correrlo
+
+|`cargo check`
+|Chequea errores de sintaxis/tipos (muy rápido)
+|Iteración constante mientras editas
+
+|`cargo clean`
+|Borra archivos generados en `target/`
+|Liberar espacio o recompilar limpio
+
+|`cargo build --release`
+|Compila optimizado para producción
+|Distribuir o medir rendimiento real
+
+|`cargo test`
+|Ejecuta tests del proyecto
+|Desarrollo basado en tests (TDD)
+
+|`cargo doc --open`
+|Genera y abre documentación
+|Consultar docs de dependencias
+|===
+
+TIP: Ejecuta `cargo --help` para ver todos los comandos disponibles, o `cargo <comando> --help` para ayuda específica.
+
+'''
+
+== Flujo de Trabajo Típico
+
+=== Desarrollo día a día
+
+[source,bash,linenums]
+----
+# 1. Crear proyecto
+cargo new mi_app
+
+# 2. Entrar al proyecto
+cd mi_app
+
+# 3. Editar código en src/main.rs
+# ... (usar tu editor favorito)
+
+# 4. Verificar errores (muy rápido)
+cargo check
+
+# 5. Compilar y ejecutar
+cargo run
+
+# 6. Repetir pasos 3-5 hasta terminar
+
+# 7. Compilar versión optimizada final
+cargo build --release
+----
+
+=== Añadir dependencias
+
+[source,bash]
+----
+# Opción 1: Editar Cargo.toml manualmente
+# Agregar: rand = "0.8"
+
+# Opción 2: Usar cargo add (Rust 1.62+)
+cargo add rand
+----
+
+Cargo descarga automáticamente las dependencias la próxima vez que compiles.
+
+'''
+
+== Próximos Pasos
+
+Ahora que sabes crear y compilar programas en Rust, estás listo para aprender:
+
+* Variables y mutabilidad (`let` vs `let mut`)
+* Tipos de datos
+* Funciones
+* Control de flujo
+* Ownership (el concepto más importante de Rust)
+
+'''
+
+== Recursos Adicionales
+
+* 📖 https://doc.rust-lang.org/cargo/[Documentación oficial de Cargo]
+* 🦀 https://doc.rust-lang.org/book/ch01-03-hello-cargo.html[The Rust Book - Hello Cargo]
+* 💬 https://users.rust-lang.org/[Foro de la comunidad]
+* 🎯 https://play.rust-lang.org/[Rust Playground] - Prueba código online
+
+'''
+
+[quote, Rust Community]
+____
+🎉 ¡Felicitaciones! Has compilado tu primer programa en Rust. +
+Cargo será tu compañero constante en este viaje. Aprende a dominarlo y serás mucho más productivo.
+____
+
+*Siguiente tema*: Variables y Mutabilidad (`let` y `let mut`) →
