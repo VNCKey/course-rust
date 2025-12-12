@@ -32,7 +32,7 @@ pub fn scalar_type() {
     let x2 = -2_000; // inferido i32
     let x3 = 42i64; // sufijo explícito
     println!("x = {}", x);
-    println!("Unsigned integers: u8, u16, u32, u64, u128, usize");
+    println!("Unsigned integers: u8, u16, u32, u64, u128, usize" );
     let y: u32 = 20;
     println!("y = {}", y);
     println!("Floats: f32, f64");

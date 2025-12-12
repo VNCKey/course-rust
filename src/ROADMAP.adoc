@@ -1,0 +1,905 @@
+= 🦀 Ruta de Aprendizaje Rust 2026
+:subtitle: De Principiante a Experto
+:source-highlighter: rouge
+:rouge-style: monokai
+:icons: font
+:toc: left
+:toclevels: 4
+:toc-title: Índice de Contenido
+:sectnums:
+:experimental:
+
+[abstract]
+.Sobre esta Ruta
+====
+Esta es una ruta de aprendizaje completa y moderna de Rust para 2026. Cubre desde la instalación hasta temas avanzados como async, macros procedurales, unsafe, FFI y arquitectura de sistemas.
+
+*Tiempo estimado*: 4-6 meses (dedicación diaria) +
+*Nivel final*: Experto en Rust
+====
+
+'''
+
+[.text-center]
+== 🎯 Niveles de Dominio
+
+[cols="1,2,1,3", options="header"]
+|===
+|Nivel
+|Descripción
+|Módulos
+|Duración Estimada
+
+|🌱 *Principiante*
+|Sintaxis básica, ownership, control de flujo
+|0-3
+|3-4 semanas
+
+|🌿 *Intermedio*
+|Estructuras, traits, colecciones, errores
+|4-7
+|4-6 semanas
+
+|🌳 *Avanzado*
+|Async, macros, testing, optimización
+|8-11
+|6-8 semanas
+
+|🔥 *Experto*
+|Unsafe, FFI, arquitectura, ecosistema completo
+|12-15
+|4-6 semanas
+|===
+
+'''
+
+= NIVEL PRINCIPIANTE 🌱
+
+== Módulo 0: Preparación del Entorno
+
+.*Objetivos*: Configurar el entorno y familiarizarse con las herramientas
+
+=== Instalación y Configuración
+* Instalar Rust y rustup
+* Configurar toolchains (`stable`, `beta`, `nightly`)
+* Actualizar Rust: `rustup update`
+* Gestión de versiones: `rustup default`
+
+=== Herramientas Esenciales
+* *Cargo*: Gestor de proyectos y dependencias
+* *rustc*: El compilador de Rust
+* *rustfmt*: Formateador de código (`cargo fmt`)
+* *Clippy*: Linter y sugerencias (`cargo clippy`)
+* *rust-analyzer*: Language Server Protocol (LSP)
+
+=== Configuración del Editor
+* VS Code + rust-analyzer
+* Zed con extensiones Rust
+* Neovim + rust-tools.nvim
+* IntelliJ IDEA + Rust plugin
+
+=== Primer Proyecto
+* Comando `cargo new`
+* Estructura de proyecto: `src/`, `Cargo.toml`, `target/`
+* Compilación: `cargo build`, `cargo run`
+* Perfiles: `--debug` vs `--release`
+* Verificación rápida: `cargo check`
+
+TIP: Usa `cargo check` durante el desarrollo para iteración rápida.
+
+'''
+
+== Módulo 1: Sintaxis Básica y Tipos
+
+.*Objetivos*: Dominar la sintaxis fundamental de Rust
+
+=== Variables y Mutabilidad
+* Variables inmutables: `let x = 5;`
+* Variables mutables: `let mut y = 10;`
+* Constantes: `const MAX: u32 = 100;`
+* Variables estáticas: `static GLOBAL: &str = "global";`
+* Shadowing y sus casos de uso
+
+=== Tipos de Datos Escalares
+* Enteros: `i8`, `i16`, `i32`, `i64`, `i128`, `isize`
+* Enteros sin signo: `u8`, `u16`, `u32`, `u64`, `u128`, `usize`
+* Flotantes: `f32`, `f64`
+* Booleanos: `bool`
+* Caracteres Unicode: `char` (4 bytes)
+
+=== Tipos Compuestos
+* Tuplas: `let t = (1, 2.5, "hello");`
+* Arrays: `let a = [1, 2, 3, 4, 5];`
+* Slices: `&[T]` y `&mut [T]`
+* Rangos: `0..10`, `0..=10`
+
+=== Strings y Texto
+* `String` (owned, heap)
+* `&str` (borrowed, stack o embebida)
+* Conversión entre tipos
+* Métodos comunes: `push_str`, `contains`, `split`
+
+=== Bloques y Expresiones
+* Todo es expresión en Rust
+* Bloques `{ }` retornan valores
+* Punto y coma vs sin punto y coma
+
+=== Comentarios y Documentación
+* Comentarios de línea: `//`
+* Comentarios de bloque: `/* */`
+* Doc comments: `///` y `//!`
+* Generar docs: `cargo doc --open`
+
+=== Macros de Uso Común
+* `println!` y `print!`
+* `format!`
+* `dbg!`
+* `todo!` y `unimplemented!`
+
+'''
+
+== Módulo 2: Ownership y Borrowing
+
+.*Objetivos*: Entender el sistema de ownership (lo más importante de Rust)
+
+=== Conceptos de Memoria
+* Stack vs Heap
+* Gestión de memoria sin GC
+* Move semantics
+* RAII (Resource Acquisition Is Initialization)
+
+=== Reglas de Ownership
+* Cada valor tiene un único dueño
+* Solo puede haber un dueño a la vez
+* Cuando el dueño sale de scope, el valor se destruye
+
+=== Borrowing (Préstamo)
+* Referencias inmutables: `&T`
+* Referencias mutables: `&mut T`
+* Reglas del borrow checker:
+** Múltiples `&T` O una `&mut T`
+** No ambos al mismo tiempo
+
+=== Lifetimes
+* Lifetimes implícitos
+* Lifetimes explícitos: `'a`, `'b`
+* Lifetime `'static`
+* Elision rules (cuándo no necesitas anotarlos)
+* Lifetimes en structs
+
+=== Smart Pointers Básicos
+* `Box<T>`: Heap allocation
+* `Rc<T>`: Reference counting (single-threaded)
+* `Arc<T>`: Atomic reference counting (multi-threaded)
+* `RefCell<T>`: Interior mutability
+* `Cell<T>`: Copy types con interior mutability
+
+=== Copy vs Clone
+* Trait `Copy`: tipos que se copian implícitamente
+* Trait `Clone`: copia explícita con `.clone()`
+* Cuándo implementar cada uno
+
+IMPORTANT: Ownership es el concepto CLAVE de Rust. Dedica tiempo a entenderlo bien.
+
+'''
+
+== Módulo 3: Control de Flujo y Funciones
+
+.*Objetivos*: Dominar estructuras de control y funciones
+
+=== Condicionales
+* `if`, `else if`, `else`
+* `if let` para pattern matching simplificado
+* Expresiones ternarias (con `if`)
+
+=== Bucles
+* `loop`: bucle infinito
+* `while`: bucle condicional
+* `for`: iteración sobre colecciones
+* Labels y `break`/`continue` con etiquetas
+* Retornar valores desde bucles
+
+=== Pattern Matching
+* `match`: pattern matching exhaustivo
+* Wildcards: `_`
+* Match guards: `if` dentro de arms
+* Destructuring en match
+* `if let` y `while let`
+
+=== Funciones
+* Declaración y sintaxis
+* Parámetros y tipos de retorno
+* Retorno implícito (última expresión)
+* Funciones divergentes: `-> !`
+* Funciones asociadas (métodos estáticos)
+
+=== Closures
+* Sintaxis: `|param| body`
+* Captura de variables del entorno
+* Traits `Fn`, `FnMut`, `FnOnce`
+* Move closures: `move ||`
+
+=== Genéricos Básicos
+* Funciones genéricas: `fn foo<T>(x: T)`
+* Bounds: `where T: Display`
+* Múltiples parámetros de tipo
+
+'''
+
+= NIVEL INTERMEDIO 🌿
+
+== Módulo 4: Estructuras y Enumeraciones
+
+.*Objetivos*: Modelar datos con structs y enums
+
+=== Structs
+* Classic structs: `struct Point { x: i32, y: i32 }`
+* Tuple structs: `struct Color(u8, u8, u8);`
+* Unit structs: `struct Marker;`
+* Field init shorthand
+* Struct update syntax
+
+=== Métodos e Implementaciones
+* Bloques `impl`
+* Métodos: `&self`, `&mut self`, `self`
+* Funciones asociadas (sin `self`)
+* Múltiples bloques `impl`
+
+=== Enumeraciones
+* Definición básica
+* Variantes con datos
+* Enums complejos
+* Métodos en enums
+
+=== Option<T>
+* Representación de valores opcionales
+* `Some(T)` y `None`
+* Métodos útiles: `unwrap`, `unwrap_or`, `map`, `and_then`
+* Pattern matching con `Option`
+
+=== Result<T, E>
+* Manejo de errores recuperables
+* `Ok(T)` y `Err(E)`
+* Operador `?` para propagación
+* Métodos: `unwrap`, `expect`, `map`, `and_then`, `or_else`
+
+=== Gestión de Errores
+* `panic!` para errores irrecuperables
+* `unwrap` y `expect`
+* Backtrace: `RUST_BACKTRACE=1`
+* Custom error types
+
+=== Traits Básicos
+* `Debug`: `{:?}` y `{:#?}`
+* `Display`: `{}`
+* `Clone` y `Copy`
+* `Drop`: destructor
+* `Default`
+* Derivar traits: `#[derive(Debug, Clone)]`
+
+'''
+
+== Módulo 5: Colecciones y Tipos Avanzados
+
+.*Objetivos*: Trabajar con estructuras de datos complejas
+
+=== Vec<T>
+* Creación: `vec![]`, `Vec::new()`
+* Métodos: `push`, `pop`, `len`, `capacity`
+* Acceso: indexing vs `get()`
+* Iteración y modificación
+
+=== HashMap<K, V>
+* Creación e inserción
+* Acceso: `get()`, `[]`, `entry()`
+* Iteración sobre keys/values/entries
+* Actualización de valores
+
+=== HashSet<T>
+* Operaciones de conjuntos
+* Unión, intersección, diferencia
+* Membership testing
+
+=== String y &str (avanzado)
+* Encodings: UTF-8
+* Indexación y por qué falla
+* Slicing seguro
+* Métodos de transformación
+
+=== Otros Tipos de Colecciones
+* `VecDeque<T>`: double-ended queue
+* `LinkedList<T>`: lista enlazada
+* `BTreeMap` y `BTreeSet`: ordenados
+* `BinaryHeap<T>`: priority queue
+
+=== Type Aliases y Newtypes
+* `type` aliases
+* Newtype pattern: `struct UserId(u64);`
+* Phantom types
+
+=== Iteradores
+* Trait `Iterator`
+* Métodos adaptadores: `map`, `filter`, `take`, `skip`
+* Consumidores: `collect`, `sum`, `fold`, `for_each`
+* Iteradores infinitos
+* `IntoIterator`
+
+=== Traits de Conversión
+* `From<T>` y `Into<T>`
+* `TryFrom<T>` y `TryInto<T>`
+* `AsRef<T>` y `AsMut<T>`
+* Conversiones automáticas
+
+'''
+
+== Módulo 6: Gestión de Errores Avanzada
+
+.*Objetivos*: Manejo robusto de errores en aplicaciones reales
+
+=== Estrategias de Error
+* Recuperables: `Result<T, E>`
+* Irrecuperables: `panic!`
+* Cuándo usar cada uno
+
+=== Custom Error Types
+* Implementar `std::error::Error`
+* Enums como errores
+* Wrapping de errores
+
+=== Librerías de Errores
+* *thiserror*: derive macros para errors
+* *anyhow*: manejo simplificado de errores
+* Cuándo usar cada una
+
+=== Propagación de Errores
+* Operador `?`
+* Boxing errors: `Box<dyn Error>`
+* Error context con `anyhow`
+
+=== Manejo de Multiple Error Types
+* Enum de errores
+* Type erasure con `dyn Error`
+* Conversiones automáticas
+
+'''
+
+== Módulo 7: Modularidad y Organización
+
+.*Objetivos*: Estructurar proyectos grandes
+
+=== Sistema de Módulos
+* Declaración: `mod module_name`
+* Jerarquía de módulos
+* `src/lib.rs` vs `src/main.rs`
+* Archivos y directorios como módulos
+
+=== Visibilidad
+* Privado por defecto
+* `pub`: público
+* `pub(crate)`: visible en el crate
+* `pub(super)`: visible en el módulo padre
+* `pub(in path)`: visible en path específico
+
+=== Uso e Importación
+* `use` statement
+* Re-exportación: `pub use`
+* Glob imports: `use module::*;`
+* Alias: `use std::io::Result as IoResult;`
+
+=== Paths
+* Paths absolutos: `crate::`
+* Paths relativos: `self::`, `super::`
+* External crates
+
+=== Workspaces
+* Múltiples crates en un proyecto
+* `Cargo.toml` del workspace
+* Dependencias compartidas
+
+=== Crates y Dependencias
+* Biblioteca vs binario
+* Múltiples binarios: `src/bin/`
+* Build scripts: `build.rs`
+* Features flags
+
+'''
+
+= NIVEL AVANZADO 🌳
+
+== Módulo 8: Traits Avanzados
+
+.*Objetivos*: Dominar el sistema de traits de Rust
+
+=== Traits en Profundidad
+* Definición e implementación
+* Default implementations
+* Trait bounds
+* Multiple trait bounds
+
+=== Associated Types
+* `type Item;` en traits
+* Diferencia vs genéricos
+* Cuándo usar cada uno
+
+=== Associated Functions
+* Constructores comunes
+* Builder pattern
+
+=== Trait Objects
+* `dyn Trait`
+* Fat pointers
+* Object safety
+* Limitaciones
+
+=== Supertraits
+* Requerir otros traits
+* Sintaxis: `trait A: B + C`
+
+=== Orphan Rule
+* Restricciones de implementación
+* Newtype pattern para evitarla
+
+=== Traits del Standard Library
+* `Deref` y `DerefMut`
+* `Index` y `IndexMut`
+* `Add`, `Sub`, `Mul`, `Div` (operator overloading)
+* `Eq`, `PartialEq`, `Ord`, `PartialOrd`
+* `Hash`
+* `Borrow` y `ToOwned`
+
+=== Coherence y Overlap
+* Reglas de especialización
+* Negative impls (experimental)
+
+'''
+
+== Módulo 9: Lifetimes Avanzados
+
+.*Objetivos*: Dominar lifetimes complejos
+
+=== Lifetime Bounds
+* `where T: 'a`
+* Generic types con lifetimes
+
+=== Múltiples Lifetimes
+* Relaciones entre lifetimes
+* Coerción de lifetimes
+
+=== Higher-Rank Trait Bounds (HRTB)
+* `for<'a>` syntax
+* Casos de uso
+
+=== Subtyping y Variance
+* Covariance
+* Contravariance
+* Invariance
+
+=== Lifetime en Traits
+* Associated types con lifetimes
+* GATs (Generic Associated Types)
+
+'''
+
+== Módulo 10: Concurrencia y Paralelismo
+
+.*Objetivos*: Escribir código concurrente seguro
+
+=== Threads
+* `std::thread::spawn`
+* `join()` para sincronización
+* Ownership en threads
+* Thread pools
+
+=== Message Passing
+* Channels: `mpsc` (multi-producer, single-consumer)
+* `Sender` y `Receiver`
+* Sincronización con mensajes
+
+=== Shared State
+* `Mutex<T>`: mutual exclusion
+* `RwLock<T>`: read-write lock
+* `Arc<T>` para compartir entre threads
+* Deadlocks y cómo evitarlos
+
+=== Atomic Types
+* `AtomicBool`, `AtomicI32`, `AtomicUsize`, etc.
+* Ordering: `Relaxed`, `Acquire`, `Release`, `SeqCst`
+* Lock-free programming
+
+=== Sync y Send Traits
+* `Send`: tipos que se pueden mover entre threads
+* `Sync`: tipos que se pueden compartir entre threads
+* Implementación automática
+
+=== Librerías de Concurrencia
+* *rayon*: paralelismo de datos
+* *crossbeam*: utilidades de concurrencia
+* *parking_lot*: locks más rápidos
+
+'''
+
+== Módulo 11: Async/Await y Programación Asíncrona
+
+.*Objetivos*: Escribir código asíncrono eficiente
+
+=== Conceptos de Async
+* Diferencia: concurrency vs parallelism
+* Async vs threads
+* Event loop y runtime
+
+=== Futures
+* Trait `Future`
+* `Poll`, `Pending`, `Ready`
+* Pin y Unpin
+
+=== Async/Await Syntax
+* `async fn`
+* `async` blocks
+* `.await` keyword
+
+=== Async Runtimes
+* *tokio*: el más usado
+* *async-std*: alternativa
+* *smol*: minimalista
+* Elegir un runtime
+
+=== Tasks y Spawning
+* `tokio::spawn`
+* Task management
+* Cancelación
+
+=== Async I/O
+* Reading y writing asíncrono
+* Networking: TCP, UDP
+* File I/O asíncrono
+
+=== Streams
+* `Stream` trait
+* Procesamiento de flujos de datos
+* Combinators: `map`, `filter`, `fold`
+
+=== Select y Join
+* `tokio::select!`: esperar múltiples futures
+* `tokio::join!`: ejecutar futures concurrentemente
+* `tokio::try_join!`
+
+=== Channels Async
+* `tokio::sync::mpsc`
+* `tokio::sync::oneshot`
+* `tokio::sync::broadcast`
+
+=== Errores Comunes en Async
+* Blocking en código async
+* Too many tasks
+* Memory leaks con cyclic references
+
+IMPORTANT: Async Rust es complejo. Practica mucho con proyectos reales.
+
+'''
+
+= NIVEL EXPERTO 🔥
+
+== Módulo 12: Macros
+
+.*Objetivos*: Crear macros declarativas y procedurales
+
+=== Macros Declarativas
+* `macro_rules!`
+* Pattern matching en macros
+* Repeticiones: `$(...)*`, `$(...)+`
+* Hygiene
+
+=== Macros Derivadas
+* `#[derive(...)]` custom
+* `syn` y `quote` crates
+* Parsing de AST
+
+=== Attribute Macros
+* `#[attribute]` custom
+* Modificación de items
+
+=== Function-like Macros
+* `my_macro!(...)`
+* Casos de uso
+
+=== Debugging Macros
+* `cargo expand`
+* Macro expansion
+* Testing macros
+
+'''
+
+== Módulo 13: Unsafe Rust y FFI
+
+.*Objetivos*: Cuando necesitas romper las reglas
+
+=== Unsafe Superpowers
+* Dereferencing raw pointers
+* Llamar funciones unsafe
+* Acceder/modificar statics mutables
+* Implementar unsafe traits
+* Acceder a fields de unions
+
+=== Raw Pointers
+* `*const T` y `*mut T`
+* Conversión desde referencias
+* Cuándo usar raw pointers
+
+=== Unsafe Traits
+* `Send` y `Sync` manual implementation
+* Implementación correcta
+
+=== Interior Mutability Unsafe
+* `UnsafeCell<T>`
+* Construcción de abstracciones seguras
+
+=== FFI (Foreign Function Interface)
+* Llamar código C desde Rust
+* `extern "C"`
+* `#[repr(C)]`
+* Binding generation con `bindgen`
+
+=== Llamar Rust desde C
+* `#[no_mangle]`
+* Crear bibliotecas dinámicas
+* Exportar funciones
+
+=== Librerías para FFI
+* *cc*: compilar C/C++ code
+* *cmake*: integración con CMake
+* *pkg-config*
+
+WARNING: Unsafe es peligroso. Solo úsalo cuando sea absolutamente necesario y documenta por qué es seguro.
+
+'''
+
+== Módulo 14: Testing, Benchmarking y Debugging
+
+.*Objetivos*: Calidad y rendimiento del código
+
+=== Unit Tests
+* `#[cfg(test)]` y `#[test]`
+* Assertions: `assert!`, `assert_eq!`, `assert_ne!`
+* `cargo test`
+* Test organization
+
+=== Integration Tests
+* Directorio `tests/`
+* Testing public API
+* Common modules
+
+=== Doc Tests
+* Tests en documentation comments
+* `cargo test --doc`
+
+=== Test Driven Development (TDD)
+* Red-Green-Refactor cycle
+* Test first approach
+
+=== Property-Based Testing
+* *proptest*: QuickCheck para Rust
+* *quickcheck*: otra alternativa
+* Generación de test cases
+
+=== Mocking
+* *mockall*: mocking framework
+* Dependency injection
+
+=== Benchmarking
+* `cargo bench`
+* *criterion*: microbenchmarking
+* Statistical analysis
+* Flamegraphs
+
+=== Profiling
+* `perf` en Linux
+* Instruments en macOS
+* `cargo flamegraph`
+* Memory profiling con `valgrind`
+
+=== Debugging
+* `dbg!` macro
+* `println!` debugging
+* GDB y LLDB
+* VS Code debugger
+* `rust-gdb` y `rust-lldb`
+
+'''
+
+== Módulo 15: Optimización y Arquitectura
+
+.*Objetivos*: Código production-ready de alto rendimiento
+
+=== Performance Optimization
+* Profiling primero
+* Evitar allocations innecesarias
+* Inline functions
+* SIMD programming
+* Cache-friendly code
+
+=== Compilation Profiles
+* Perfiles personalizados
+* LTO (Link-Time Optimization)
+* Codegen options
+* Profile-guided optimization (PGO)
+
+=== Binary Size Optimization
+* `strip` symbols
+* `opt-level = "z"`
+* `lto = true`
+* Eliminar dependencias innecesarias
+
+=== Arquitectura de Aplicaciones
+* Layered architecture
+* Hexagonal architecture
+* Domain-driven design
+* Clean architecture en Rust
+
+=== Patterns y Idioms
+* Builder pattern
+* Newtype pattern
+* Type state pattern
+* Strategy pattern
+* Visitor pattern
+
+=== Embedded Rust
+* `#![no_std]`
+* Bare metal programming
+* *embedded-hal*
+* Targets específicos
+
+=== WebAssembly
+* `wasm32-unknown-unknown`
+* *wasm-bindgen*
+* *wasm-pack*
+* Integración con JavaScript
+
+=== Desarrollo de CLI
+* *clap*: argument parsing
+* *structopt*: derive-based CLI
+* *colored*: output colorido
+* *indicatif*: progress bars
+
+=== Web Development
+* *actix-web*: framework web rápido
+* *rocket*: framework ergonómico
+* *axum*: basado en tokio
+* *warp*: composable web framework
+
+=== Database Integration
+* *sqlx*: async SQL toolkit
+* *diesel*: ORM type-safe
+* *tokio-postgres*: PostgreSQL async
+* *rusqlite*: SQLite binding
+
+'''
+
+= PROYECTOS PRÁCTICOS 🛠️
+
+== Proyectos Recomendados por Nivel
+
+=== Principiante (Módulos 0-3)
+. CLI calculator
+. Todo list (file-based)
+. Number guessing game
+. Temperature converter
+. Text analyzer (word count, etc.)
+
+=== Intermedio (Módulos 4-7)
+. JSON parser
+. HTTP client
+. Markdown to HTML converter
+. Simple web scraper
+. Key-value database
+
+=== Avanzado (Módulos 8-11)
+. Concurrent web server
+. Async chat application
+. Thread pool implementation
+. HTTP load balancer
+. Redis clone
+
+=== Experto (Módulos 12-15)
+. Compiler/Interpreter for custom language
+. Database engine
+. Operating system kernel component
+. Game engine
+. Distributed system (consensus protocol)
+
+'''
+
+= RECURSOS Y COMUNIDAD 📚
+
+== Documentación Oficial
+* https://doc.rust-lang.org/book/[The Rust Book]
+* https://doc.rust-lang.org/rust-by-example/[Rust by Example]
+* https://doc.rust-lang.org/reference/[The Rust Reference]
+* https://doc.rust-lang.org/nomicon/[The Rustonomicon] (unsafe)
+* https://rust-lang.github.io/async-book/[Async Book]
+
+== Libros Recomendados
+* *Programming Rust* (O'Reilly)
+* *Rust in Action* (Manning)
+* *Zero To Production In Rust* (web development)
+* *Rust for Rustaceans* (avanzado)
+
+== Ejercicios y Práctica
+* https://exercism.org/tracks/rust[Exercism Rust Track]
+* https://github.com/rust-lang/rustlings[Rustlings]
+* https://adventofcode.com/[Advent of Code] (en Rust)
+* https://leetcode.com/[LeetCode] (practicar con Rust)
+
+== Comunidad
+* https://users.rust-lang.org/[Foro oficial]
+* https://www.reddit.com/r/rust/[r/rust en Reddit]
+* Discord de Rust (oficial)
+* https://github.com/rust-lang/rust[GitHub - contribuir]
+
+== Blogs y Newsletters
+* https://blog.rust-lang.org/[Rust Blog oficial]
+* https://this-week-in-rust.org/[This Week in Rust]
+* https://rust-analyzer.github.io/[Rust Analyzer blog]
+
+== Podcasts
+* Rustacean Station
+* New Rustacean
+
+'''
+
+= CONSEJOS Y MEJORES PRÁCTICAS 💡
+
+== Durante el Aprendizaje
+
+TIP: *Practica todos los días*. Aunque sea 30 minutos.
+
+TIP: *Lee código de otros*. Explora crates populares en crates.io.
+
+TIP: *No tengas miedo del borrow checker*. Es tu amigo, te está enseñando.
+
+TIP: *Usa Clippy*. Te ayuda a escribir código idiomático.
+
+WARNING: *No uses `unwrap()` en producción*. Maneja errores apropiadamente.
+
+IMPORTANT: *Entiende ownership antes de seguir*. Es el fundamento de todo.
+
+== Hábitos Productivos
+
+* Escribe tests desde el principio
+* Documenta tu código (doc comments)
+* Usa `cargo fmt` automáticamente
+* Ejecuta `cargo clippy` regularmente
+* Lee mensajes de error completos (son muy buenos)
+* Contribuye a proyectos open source
+
+== Cuando Te Atores
+
+. Lee el mensaje de error completo (Rust tiene los mejores)
+. Busca en https://doc.rust-lang.org/[docs oficiales]
+. Pregunta en https://users.rust-lang.org/[el foro]
+. Usa https://play.rust-lang.org/[Rust Playground] para experimentar
+. Simplifica el problema a un caso mínimo
+
+'''
+
+[quote, Rust Community]
+____
+🦀 *¡Bienvenido a Rust!*
+
+El aprendizaje puede ser empinado al principio, pero vale la pena.
+Rust te hará un mejor programador en cualquier lenguaje.
+
+*"Fighting the borrow checker makes you a better developer."*
+____
+
+'''
+
+[.text-center]
+== 🎯 Próximos Pasos
+
+. Instala Rust
+. Lee los Módulos 0-1 de esta guía
+. Completa https://github.com/rust-lang/rustlings[Rustlings]
+. Lee https://doc.rust-lang.org/book/[The Rust Book] en paralelo
+. Construye proyectos pequeños constantemente
+
+*¡Buena suerte en tu viaje con Rust!* 🚀
