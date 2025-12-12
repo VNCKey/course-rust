@@ -1,7 +1,7 @@
 = Rust Peru 🦀
 
 
-Somos 
+Somos
 Esta es una ruta de aprendizaje completa y moderna de Rust para 2026. Cubre desde la instalación hasta temas avanzados como async, macros procedurales, unsafe, FFI y arquitectura de sistemas.
 
 *Tiempo estimado*: 4-6 meses (dedicación diaria) +
