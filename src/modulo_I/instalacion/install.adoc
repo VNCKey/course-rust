@@ -1,0 +1,112 @@
+= Instalación de Rust
+:source-highlighter: rouge
+:icons: font
+:toc:
+
+== Instalación en Linux y macOS
+
+. Abre una terminal.
+. Ejecuta el siguiente comando para descargar e iniciar el instalador de Rust:
+
+[source,bash]
+----
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+----
+
+Este comando descarga el instalador de *rustup*, que configurará el compilador Rust, Cargo y las herramientas necesarias.
+
+. Durante el proceso, se te preguntará si deseas continuar con la instalación por defecto o personalizarla.
++
+La opción recomendada es presionar *Enter* para aceptar la configuración estándar. Verás algo como esto:
+
+[source,bash]
+----
+Rust is installed now. Great!
+
+To get started you may need to restart your current shell.
+This would reload your PATH environment variable to include
+Cargo's bin directory ($HOME/.cargo/bin).
+----
+
+. Reinicia tu terminal o cierra sesión y vuelve a iniciar para que los cambios en el PATH surtan efecto (rustup lo configura automáticamente, pero a veces necesita esto).
+
+== Instalación de Rust en Windows
+
+=== Instalar Visual Studio Build Tools
+
+Descarga Visual Studio desde:
+https://visualstudio.microsoft.com/es/downloads/[https://visualstudio.microsoft.com/es/downloads/]
+
+Rust en Windows necesita el compilador MSVC para poder generar archivos `.exe`.
+Para eso es necesario instalar el componente *"Desktop Development with C++"*, que incluye todas las herramientas esenciales para compilar programas nativos.
+
+=== Instalación minimalista
+
+Si no planeas desarrollar en C++ y quieres instalar solo lo indispensable, puedes ir a la pestaña “Componentes individuales” y seleccionar únicamente:
+
+* MSVC v143 – VS 2022 C++ x64/x86 build tools
+* Windows 11 SDK (10.0.22621.0)
+
+La versión exacta del SDK no afecta al código puro de Rust, pero si también trabajas con C++, puede que necesites una versión específica según tu proyecto.
+
+Después de seleccionar los componentes, haz clic en *Instalar* y espera a que finalice.
+
+=== Descargar Rust desde la página oficial
+
+Accede a:
+https://www.rust-lang.org/tools/install[https://www.rust-lang.org/tools/install]
+
+Aquí encontrarás tres instaladores:
+
+* rustup-init.exe (32 bits)
+* rustup-init.exe (x64 / 64 bits)
+* rustup-init.exe (ARM64)
+
+Selecciona el que corresponda a la arquitectura de tu sistema.
+
+=== Ejecutar el instalador
+
+Ejecuta el archivo `rustup-init.exe` y sigue las instrucciones de la consola.
+
+Cuando aparezca el menú, simplemente presiona *Enter* para la instalación estándar:
+
+[source,bash]
+----
+1) Proceed with standard installation (default - just press enter)
+2) Customize installation
+3) Cancel installation
+>1
+----
+
+En la mayoría de casos es necesario cerrar y volver a abrir la terminal para que Windows reconozca los nuevos comandos `rustc`, `cargo`, `rustup` y todas sus herramientas.
+
+== Verificación de la Instalación
+
+Ejecuta los siguientes comandos en tu terminal (Windows, Linux o macOS) para confirmar que Rust se instaló correctamente:
+
+[source,bash]
+----
+rustc --version
+cargo --version
+----
+
+Si la instalación fue exitosa, verás algo similar a lo siguiente:
+
+[source,bash]
+----
+cargo --version
+cargo 1.89.0 (c24e10642 2025-06-23)
+
+rustc --version
+rustc 1.89.0 (29483883e 2025-08-04)
+
+rustdoc --version
+rustdoc 1.89.0 (29483883e 2025-08-04)
+----
+
+TIP: Puedes guardar estos bloques en un archivo `instalacion.adoc` y compilarlo con:
+[source,bash]
+----
+asciidoctor instalacion.adoc   # HTML
+asciidoctor-pdf instalacion.adoc  # PDF
+----

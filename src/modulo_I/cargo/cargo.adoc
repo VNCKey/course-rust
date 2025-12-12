@@ -1,4 +1,4 @@
-= 📦 Cargo: Compilación y Gestión de Dependencias
+= Cargo: Compilación y Gestión de Dependencias
 :toc: left
 :toclevels: 3
 :sectnums:
