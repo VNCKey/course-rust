@@ -12,8 +12,6 @@
 
 Rust se instala mediante *rustup*, el instalador oficial que gestiona versiones del compilador, toolchains y herramientas asociadas. Este proceso es prácticamente idéntico en todos los sistemas operativos.
 
-IMPORTANT: Antes de comenzar, asegúrate de tener una conexión a internet estable, ya que `rustup` descargará los componentes necesarios.
-
 '''
 
 == Instalación en Linux y macOS
@@ -94,24 +92,7 @@ https://visualstudio.microsoft.com/es/downloads/
 
 ==== Componentes requeridos
 
-Rust necesita el workload *"Desarrollo para escritorio con C++"* (_Desktop Development with C++_).
-
-.Opciones de instalación
-[cols="1,2,1", options="header"]
-|===
-|Tipo
-|Componentes
-|Tamaño aproximado
-
-|*Completa* +
-(Recomendada)
-|Workload completo de C++
-|~6-8 GB
-
-|*Minimalista*
-|Solo componentes esenciales
-|~2-3 GB
-|===
+Rust necesita el workload "Desarrollo para escritorio con C++" (Desktop Development with C++).
 
 ==== Instalación minimalista
 
@@ -141,19 +122,18 @@ Aquí encontrarás tres instaladores según la arquitectura de tu sistema:
 |Instalador
 
 |32 bits (x86)
-|`rustup-init.exe` (32-bit)
+|`rustup-init.exe`
 
 |64 bits (x64) +
 *Más común*
-|`rustup-init.exe` (64-bit)
+|`rustup-init.exe`
 
 |ARM64 +
 _Surface Pro X, etc._
-|`rustup-init.exe` (ARM64)
+|`rustup-init.exe`
 |===
 
-TIP: Si no estás seguro de tu arquitectura, probablemente sea *64 bits (x64)*. Puedes verificarlo en: +
-kbd:[Win] + kbd:[Pause/Break] → Tipo de sistema.
+TIP: 
 
 === Paso 3: Ejecutar el instalador
 
@@ -301,43 +281,5 @@ dir $env:USERPROFILE\.cargo\bin\rustc.exe
 Este error significa que falta MSVC. Regresa al <<Paso 1: Instalar Visual Studio Build Tools>> y asegúrate de instalar los componentes correctos.
 
 '''
-
-== Compilación del Documento
-
-Para generar este documento en diferentes formatos:
-
-.Generar HTML
-[source,bash]
-----
-asciidoctor instalacion.adoc
-----
-
-.Generar PDF (requiere asciidoctor-pdf)
-[source,bash]
-----
-gem install asciidoctor-pdf
-asciidoctor-pdf instalacion.adoc
-----
-
-.Resultado
-----
-instalacion.html    # Versión web
-instalacion.pdf     # Versión para imprimir
-----
-
-'''
-
-== Recursos Adicionales
-
-* 📖 https://www.rust-lang.org/learn/get-started[Guía oficial de instalación]
-* 🔧 https://rust-lang.github.io/rustup/[Documentación de Rustup]
-* 💬 https://users.rust-lang.org/[Foro de la comunidad Rust]
-* 🦀 https://doc.rust-lang.org/book/[The Rust Programming Language Book]
-
-[quote, Rust Community]
-____
-¡Bienvenido a Rust! 🦀 +
-Ahora estás listo para comenzar tu viaje en uno de los lenguajes más seguros y eficientes del mundo.
-____
 
 *Siguiente tema*: Hello World y estructura de un proyecto Rust →
