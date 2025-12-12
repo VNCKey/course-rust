@@ -129,7 +129,7 @@ El archivo `src/main.rs` contiene el código inicial:
 [source,rust,linenums]
 ----
 fn main() {  // <1>
-    println!("Hello, world!");  // <2>
+    println!("Hola, Rust!");  // <2>
 }  // <3>
 ----
 <1> `fn main()` define la función principal del programa (punto de entrada)
@@ -164,7 +164,7 @@ cargo run
    Compiling hola_mundo v0.1.0 (/ruta/hola_mundo)  // <1>
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.42s  // <2>
      Running `target/debug/hola_mundo`  // <3>
-Hello, world!  // <4>
+Hola, Rust!  // <4>
 ----
 <1> Cargo compila el proyecto (solo la primera vez o si hay cambios)
 <2> Perfil de compilación: `dev` (desarrollo, sin optimizaciones)
@@ -179,7 +179,7 @@ Si no modificaste el código, la segunda ejecución será instantánea:
 ----
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
      Running `target/debug/hola_mundo`
-Hello, world!
+Hola, Rust!
 ----
 
 Cargo solo recompila lo que cambió (*compilación incremental*).
