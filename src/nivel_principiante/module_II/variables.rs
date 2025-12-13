@@ -35,11 +35,14 @@ fn main(){
 // Scope
 fn main() {
     let x = 10;
+
     {
         let y = 20;
         println!("x = {}, y = {}", x, y);
     }
+
     println!("x = {}", x);
+    // println!("y = {}", y);  // ❌ Error: y no existe aquí
 }
 
 // const y static
@@ -53,4 +56,26 @@ pub fn main() {
     println!("Constante: {}", VALOR_CONSTANTE);
     //tiene dirección única; todos los usos comparten la misma ubicación de memoria.
     println!("Static: {}", APP_NAME);
+}
+
+
+// Statements
+fn main() {
+    let x = 5;
+    let y = {
+        let z = 3;
+        z + 1
+    };
+
+    println!("x = {}, y = {}", x, y);
+}
+
+// Expresión
+fn main() {
+    // Todo lo siguiente son expresiones
+    let a = 5;              // 5 es una expresión
+    let b = a + 1;          // a + 1 es una expresión
+    let c = if a > 3 { 10 } else { 20 };
+
+    println!("a={}, b={}, c={}", a, b, c);
 }

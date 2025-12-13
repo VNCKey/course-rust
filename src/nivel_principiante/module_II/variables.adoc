@@ -306,30 +306,6 @@ x = 10, y = 20
 x = 10
 ----
 
-=== Scope y Ownership
-
-[source,rust,linenums]
-----
-fn main() {
-    let mensaje = String::from("Hola");  // <1>
-
-    {
-        let saludo = mensaje;  // <2>
-        println!("Dentro: {saludo}");
-    }  // <3>
-
-    // println!("Fuera: {mensaje}");  // ❌ Error: valor movido
-}
-----
-<1> `mensaje` es dueño del String
-<2> Ownership se mueve a `saludo`
-<3> `saludo` se destruye aquí, liberando la memoria
-
-[IMPORTANT]
-====
-Este ejemplo muestra **ownership**: cuando `mensaje` se mueve a `saludo`, `mensaje` ya no es válido.
-====
-
 === Scope Anidado
 
 [source,rust,linenums]
@@ -617,32 +593,7 @@ Con semicolon: ()
 * Con `;` al final → Statement (no retorna valor, retorna `()`)
 ====
 
-=== Funciones como Expresiones
 
-[source,rust,linenums]
-----
-/// Calcula el cuadrado de un número
-fn cuadrado(n: i32) -> i32 {
-    n * n  // <1>
-}
-
-/// Retorna el mayor de dos números
-fn maximo(a: i32, b: i32) -> i32 {
-    if a > b { a } else { b }  // <2>
-}
-
-fn main() {
-    let x = cuadrado(5);
-    let y = maximo(10, 20);
-
-    println!("Cuadrado de 5: {}", x);
-    println!("Máximo(10, 20): {}", y);
-}
-----
-<1> Expresión de retorno (sin `return` ni `;`)
-<2> `if` como expresión que retorna un valor
-
-'''
 
 == Anotaciones de Tipo
 
@@ -679,24 +630,6 @@ fn main() {
 <2> `f32`: flotante de 32 bits
 <3> `bool`: booleano
 <4> `char`: caracter Unicode (4 bytes)
-
-=== Cuándo Son Necesarias las Anotaciones
-
-[source,rust,linenums]
-----
-fn main() {
-    // ❌ Error: no puede inferir el tipo
-    // let numero = "42".parse().unwrap();
-
-    // ✅ Opción 1: Anotar la variable
-    let numero: i32 = "42".parse().unwrap();
-
-    // ✅ Opción 2: Turbofish syntax
-    let otro = "100".parse::<i32>().unwrap();
-
-    println!("Número: {}, Otro: {}", numero, otro);
-}
-----
 
 '''
 
@@ -768,113 +701,6 @@ cargo doc --open
 ----
 
 Esto genera HTML interactivo con tu documentación.
-
-[TIP]
-====
-Escribe doc comments para:
-
-* Funciones públicas
-* Structs y enums
-* Módulos
-* Comportamiento no obvio
-====
-
-'''
-
-== Ejemplos Prácticos Completos
-
-=== Ejemplo 1: Convertidor de Temperatura
-
-[source,rust,linenums]
-----
-/// Convierte grados Celsius a Fahrenheit
-///
-/// # Ejemplos
-///
-/// ```
-/// let f = celsius_a_fahrenheit(0.0);
-/// assert_eq!(f, 32.0);
-/// ```
-fn celsius_a_fahrenheit(celsius: f64) -> f64 {
-    celsius * 1.8 + 32.0
-}
-
-fn main() {
-    let temp_celsius = 25.0;
-    let temp_fahrenheit = celsius_a_fahrenheit(temp_celsius);
-
-    println!("{:.1}°C = {:.1}°F", temp_celsius, temp_fahrenheit);
-}
-----
-
-=== Ejemplo 2: Calculadora de IMC
-
-[source,rust,linenums]
-----
-/// Calcula el Índice de Masa Corporal (IMC)
-///
-/// # Argumentos
-///
-/// * `peso_kg` - Peso en kilogramos
-/// * `altura_m` - Altura en metros
-fn calcular_imc(peso_kg: f64, altura_m: f64) -> f64 {
-    peso_kg / (altura_m * altura_m)
-}
-
-fn main() {
-    let peso = 70.0;
-    let altura = 1.75;
-
-    let imc = calcular_imc(peso, altura);
-
-    println!("Peso: {}kg", peso);
-    println!("Altura: {}m", altura);
-    println!("IMC: {:.2}", imc);
-
-    // Clasificación usando expresión if
-    let clasificacion = if imc < 18.5 {
-        "Bajo peso"
-    } else if imc < 25.0 {
-        "Peso normal"
-    } else if imc < 30.0 {
-        "Sobrepeso"
-    } else {
-        "Obesidad"
-    };
-
-    println!("Clasificación: {}", clasificacion);
-}
-----
-
-=== Ejemplo 3: Contador con Estado
-
-[source,rust,linenums]
-----
-/// Representa un contador con límite máximo
-static MAX_CONTADOR: i32 = 100;
-
-fn main() {
-    let mut contador = 0;
-
-    println!("Contador inicial: {}", contador);
-
-    // Incrementar en un loop
-    for _ in 0..5 {
-        contador += 1;
-
-        if contador >= MAX_CONTADOR {
-            println!("¡Límite alcanzado!");
-            break;
-        }
-
-        println!("Contador: {}", contador);
-    }
-
-    // Shadowing para cambiar el tipo
-    let contador = format!("Final: {}", contador);
-    println!("{}", contador);
-}
-----
 
 '''
 
