@@ -42,8 +42,6 @@ fn main() {
     println!("x = {}", x);
 }
 
-
-
 // const y static
 
 const VALOR_CONSTANTE: &str = "Texto constante";
