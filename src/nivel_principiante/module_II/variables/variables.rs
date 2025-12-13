@@ -3,10 +3,19 @@
 fn main(){
     // Las variables son inmutables por defecto
     let edad = 25;
+    let numero = 50;
     
+    // Primeras macros basicos
     // formas de imprimir
     println!("Mi edad es {}", edad);
-    println!("Mi edad es {edad}");
+    print!("Mi edad es {edad}");
+    
+    
+    // Argumentos posicionales
+    println!("{0} + {0} = {1}", edad, numero);
+    
+    // Nombres de argumento
+    println!("{nombre} tiene {edad} años", nombre = "Ana", edad = 30);
 }
 
 // Variables con let mut
@@ -20,6 +29,8 @@ fn main(){
     
     println!("Mi nuevo carro es {}", carro);
 }
+
+
 
 // Sombrear variables
 fn main(){
