@@ -1,0 +1,946 @@
+= 📝 Variables y Mutabilidad en Rust
+:toc: left
+:toclevels: 3
+:sectnums:
+:icons: font
+:source-highlighter: rouge
+:rouge-style: monokai
+:experimental:
+
+[abstract]
+.Sobre este módulo
+====
+En este módulo aprenderás:
+
+* Variables inmutables con `let`
+* Variables mutables con `let mut`
+* Shadowing (sombreado de variables)
+* Constantes con `const`
+* Variables estáticas con `static`
+* Scope (alcance de las variables)
+* Expresiones vs Statements
+* Documentación de código con cargo doc
+
+*Tiempo estimado*: 45-60 minutos
+====
+
+'''
+
+== Variables con `let`
+
+En Rust, las variables son **inmutables por defecto**. Esto significa que una vez que asignas un valor, no puedes cambiarlo.
+
+[IMPORTANT]
+====
+La inmutabilidad por defecto es una característica clave de Rust que previene bugs y hace el código más seguro y predecible.
+====
+
+=== Ejemplo Básico
+
+[source,rust,linenums]
+----
+fn main() {
+    // Las variables son inmutables por defecto
+    let edad = 25;  // <1>
+
+    // Formas de imprimir
+    println!("Mi edad es {}", edad);  // <2>
+    println!("Mi edad es {edad}");    // <3>
+}
+----
+<1> Variable inmutable `edad` con valor 25
+<2> Formato tradicional con `{}`
+<3> Formato interpolado (Rust 1.58+)
+
+.Output
+[source,text]
+----
+Mi edad es 25
+Mi edad es 25
+----
+
+=== Intentar Mutar una Variable Inmutable
+
+[source,rust,linenums,highlight=5]
+----
+fn main() {
+    let edad = 25;
+
+    // ❌ Esto causará un error de compilación
+    edad = 26;  // <1>
+
+    println!("Mi edad es {edad}");
+}
+----
+<1> Error: cannot assign twice to immutable variable
+
+.Error de compilación
+[source,text]
+----
+error[E0384]: cannot assign twice to immutable variable `edad`
+ --> src/main.rs:5:5
+  |
+2 |     let edad = 25;
+  |         ----
+  |         |
+  |         first assignment to `edad`
+  |         help: consider making this binding mutable: `mut edad`
+5 |     edad = 26;
+  |     ^^^^^^^^^ cannot assign twice to immutable variable
+----
+
+NOTE: Observa cómo el compilador te sugiere la solución: añadir `mut`.
+
+'''
+
+== Variables Mutables con `let mut`
+
+Si necesitas cambiar el valor de una variable, debes declararla explícitamente como **mutable** usando `let mut`.
+
+=== Ejemplo Básico de Mutabilidad
+
+[source,rust,linenums]
+----
+fn main() {
+    // Variable mutable
+    let mut carro = "Toyota";  // <1>
+
+    println!("Mi carro es {}", carro);
+
+    // ✅ Podemos cambiar el valor
+    carro = "Honda";  // <2>
+
+    println!("Mi nuevo carro es {}", carro);
+}
+----
+<1> `mut` permite que la variable sea mutable
+<2> Reasignación válida porque `carro` es mutable
+
+.Output
+[source,text]
+----
+Mi carro es Toyota
+Mi nuevo carro es Honda
+----
+
+=== Mutabilidad con Tipos Numéricos
+
+[source,rust,linenums]
+----
+fn main() {
+    let mut contador = 0;
+
+    println!("Contador inicial: {contador}");
+
+    contador += 1;  // <1>
+    println!("Después de incrementar: {contador}");
+
+    contador *= 2;  // <2>
+    println!("Después de duplicar: {contador}");
+}
+----
+<1> Incrementa el contador en 1
+<2> Multiplica el contador por 2
+
+.Output
+[source,text]
+----
+Contador inicial: 0
+Después de incrementar: 1
+Después de duplicar: 2
+----
+
+[TIP]
+====
+Usa `mut` solo cuando realmente necesites mutar la variable. La inmutabilidad hace el código más fácil de razonar.
+====
+
+'''
+
+== Shadowing (Sombreado de Variables)
+
+El **shadowing** permite declarar una nueva variable con el mismo nombre que una anterior. La nueva variable "sombrea" a la anterior.
+
+=== Shadowing Básico
+
+[source,rust,linenums]
+----
+fn main() {
+    let edad = 25;  // <1>
+
+    println!("Mi edad es {}", edad);
+
+    let edad = 35;  // <2>
+
+    println!("Mi edad sombreada es {}", edad);
+}
+----
+<1> Primera declaración de `edad`
+<2> Segunda declaración que sombrea a la primera
+
+.Output
+[source,text]
+----
+Mi edad es 25
+Mi edad sombreada es 35
+----
+
+=== Diferencia: Shadowing vs Mutabilidad
+
+[cols="1,2,2", options="header"]
+|===
+|
+|Shadowing (`let`)
+|Mutabilidad (`mut`)
+
+|*Sintaxis*
+|`let x = ...; let x = ...;`
+|`let mut x = ...; x = ...;`
+
+|*Cambio de tipo*
+|✅ Permitido
+|❌ No permitido
+
+|*Crea nueva variable*
+|✅ Sí
+|❌ No (misma variable)
+
+|*Cuándo usar*
+|Transformaciones de datos
+|Valores que cambian en el tiempo
+|===
+
+=== Shadowing con Cambio de Tipo
+
+[source,rust,linenums]
+----
+fn main() {
+    let espacios = "   ";  // <1>
+    println!("Tipo: String slice, valor: '{}'", espacios);
+
+    let espacios = espacios.len();  // <2>
+    println!("Tipo: número, valor: {}", espacios);
+}
+----
+<1> `espacios` es un `&str` (string slice)
+<2> `espacios` ahora es un `usize` (número)
+
+.Output
+[source,text]
+----
+Tipo: String slice, valor: '   '
+Tipo: número, valor: 3
+----
+
+[NOTE]
+====
+Con `mut`, este código no compilaría porque no puedes cambiar el tipo de una variable mutable:
+
+[source,rust]
+----
+let mut espacios = "   ";
+espacios = espacios.len();  // ❌ Error: tipos incompatibles
+----
+====
+
+=== Shadowing en Diferentes Scopes
+
+[source,rust,linenums]
+----
+fn main() {
+    let x = 5;  // <1>
+    println!("Outer x: {x}");
+
+    {
+        let x = x * 2;  // <2>
+        println!("Inner x: {x}");
+    }
+
+    println!("Outer x después del bloque: {x}");  // <3>
+}
+----
+<1> `x` en el scope externo vale 5
+<2> `x` en el scope interno sombrea al externo y vale 10
+<3> El `x` externo sigue siendo 5
+
+.Output
+[source,text]
+----
+Outer x: 5
+Inner x: 10
+Outer x después del bloque: 5
+----
+
+'''
+
+== Scope (Alcance de Variables)
+
+El **scope** determina dónde una variable es válida en tu código. En Rust, el scope está definido por llaves `{ }`.
+
+=== Scope Básico
+
+[source,rust,linenums]
+----
+fn main() {
+    let x = 10;  // <1>
+
+    {
+        let y = 20;  // <2>
+        println!("x = {}, y = {}", x, y);  // <3>
+    }  // <4>
+
+    println!("x = {}", x);  // <5>
+    // println!("y = {}", y);  // ❌ Error: y no existe aquí
+}
+----
+<1> `x` declarada en el scope externo
+<2> `y` declarada en el scope interno
+<3> Ambas variables son accesibles dentro del bloque interno
+<4> `y` se destruye al salir del bloque
+<5> Solo `x` es accesible aquí
+
+.Output
+[source,text]
+----
+x = 10, y = 20
+x = 10
+----
+
+=== Scope y Ownership
+
+[source,rust,linenums]
+----
+fn main() {
+    let mensaje = String::from("Hola");  // <1>
+
+    {
+        let saludo = mensaje;  // <2>
+        println!("Dentro: {saludo}");
+    }  // <3>
+
+    // println!("Fuera: {mensaje}");  // ❌ Error: valor movido
+}
+----
+<1> `mensaje` es dueño del String
+<2> Ownership se mueve a `saludo`
+<3> `saludo` se destruye aquí, liberando la memoria
+
+[IMPORTANT]
+====
+Este ejemplo muestra **ownership**: cuando `mensaje` se mueve a `saludo`, `mensaje` ya no es válido.
+====
+
+=== Scope Anidado
+
+[source,rust,linenums]
+----
+fn main() {
+    let a = 1;
+
+    {
+        let b = 2;
+
+        {
+            let c = 3;
+            println!("a={}, b={}, c={}", a, b, c);  // <1>
+        }
+
+        println!("a={}, b={}", a, b);  // <2>
+        // println!("c={}", c);  // ❌ Error
+    }
+
+    println!("a={}", a);  // <3>
+}
+----
+<1> Todas las variables accesibles en el scope más interno
+<2> Solo `a` y `b` accesibles aquí
+<3> Solo `a` accesible en el scope externo
+
+'''
+
+== Constantes con `const`
+
+Las **constantes** son valores que nunca cambian y deben tener un tipo explícito.
+
+=== Declaración de Constantes
+
+[source,rust,linenums]
+----
+// Constantes se declaran fuera de funciones
+const MAX_PUNTOS: u32 = 100_000;  // <1>
+const PI: f64 = 3.14159265359;    // <2>
+const APP_VERSION: &str = "1.0.0";
+
+fn main() {
+    println!("Máximo de puntos: {}", MAX_PUNTOS);
+    println!("Valor de PI: {}", PI);
+    println!("Versión: {}", APP_VERSION);
+}
+----
+<1> Las constantes SIEMPRE usan `SCREAMING_SNAKE_CASE`
+<2> El tipo debe ser explícito (`u32`, `f64`, etc.)
+
+.Output
+[source,text]
+----
+Máximo de puntos: 100000
+Valor de PI: 3.14159265359
+Versión: 1.0.0
+----
+
+=== Reglas de las Constantes
+
+[cols="1,2", options="header"]
+|===
+|Regla
+|Descripción
+
+|*Tipo explícito*
+|Siempre debes anotar el tipo
+
+|*Expresiones constantes*
+|Solo pueden ser valores calculables en compile-time
+
+|*Inmutables*
+|NUNCA pueden ser mutables (no existe `mut const`)
+
+|*Scope global*
+|Pueden declararse fuera de funciones
+
+|*Naming*
+|Siempre en MAYÚSCULAS con guiones bajos
+|===
+
+[source,rust,linenums]
+----
+const SEGUNDOS_EN_HORA: u32 = 60 * 60;  // ✅ OK: expresión constante
+
+fn main() {
+    const LOCAL: i32 = 42;  // ✅ OK: constante local
+    println!("Segundos en hora: {}", SEGUNDOS_EN_HORA);
+    println!("Constante local: {}", LOCAL);
+}
+----
+
+=== Constantes vs Variables Inmutables
+
+[cols="1,2,2", options="header"]
+|===
+|
+|`const`
+|`let` (inmutable)
+
+|*Cambio*
+|Nunca
+|Nunca (pero puede usar shadowing)
+
+|*Tipo*
+|Siempre explícito
+|Puede inferirse
+
+|*Scope*
+|Global o local
+|Local
+
+|*Valor*
+|Solo compile-time
+|Cualquier valor (runtime)
+
+|*Inlining*
+|Sí, se inlinea
+|No necesariamente
+|===
+
+'''
+
+== Variables Estáticas con `static`
+
+Las **variables estáticas** tienen una ubicación fija en memoria y viven durante toda la ejecución del programa.
+
+=== Declaración de Variables Estáticas
+
+[source,rust,linenums]
+----
+/// Nombre de la aplicación
+pub static APP_NAME: &str = "MiApp";  // <1>
+
+/// Versión del protocolo
+static PROTOCOLO_VERSION: u8 = 2;
+
+fn main() {
+    // Tiene dirección única en memoria
+    println!("Static: {}", APP_NAME);  // <2>
+    println!("Protocolo v{}", PROTOCOLO_VERSION);
+}
+----
+<1> `pub` hace la variable accesible desde otros módulos
+<2> Todos los usos comparten la misma ubicación de memoria
+
+.Output
+[source,text]
+----
+Static: MiApp
+Protocolo v2
+----
+
+=== Diferencias: `const` vs `static`
+
+[cols="1,2,2", options="header"]
+|===
+|
+|`const`
+|`static`
+
+|*Memoria*
+|Se inlinea (copia en cada uso)
+|Dirección fija en memoria
+
+|*Mutabilidad*
+|Nunca
+|Posible con `unsafe`
+
+|*Lifetime*
+|No aplica
+|`'static`
+
+|*Cuándo usar*
+|Valores inmutables simples
+|Valores compartidos globales
+|===
+
+=== Ejemplo Comparativo
+
+[source,rust,linenums]
+----
+const VALOR_CONSTANTE: &str = "Texto constante";  // <1>
+static VALOR_ESTATICO: &str = "Texto estático";   // <2>
+
+fn main() {
+    // const: cada uso es una copia del valor literal
+    println!("Constante: {}", VALOR_CONSTANTE);
+
+    // static: tiene dirección única en memoria
+    println!("Static: {}", VALOR_ESTATICO);
+
+    // Puedes obtener la dirección de un static
+    println!("Dirección de static: {:p}", &VALOR_ESTATICO as *const _);
+}
+----
+<1> Se inlinea: cada uso es una copia
+<2> Ubicación única en memoria compartida
+
+'''
+
+== Expresiones vs Statements
+
+En Rust, es crucial entender la diferencia entre **expresiones** y **statements**.
+
+=== ¿Qué es un Statement?
+
+Un **statement** es una instrucción que realiza una acción pero **NO retorna un valor**.
+
+[source,rust,linenums]
+----
+fn main() {
+    let x = 5;           // <1>
+    let y = {            // <2>
+        let z = 3;       // statement
+        z + 1            // <3>
+    };
+
+    println!("x = {}, y = {}", x, y);
+}
+----
+<1> Statement: declaración de variable
+<2> `y` recibe el valor de la expresión del bloque
+<3> Expresión: retorna `z + 1` (sin `;`)
+
+.Output
+[source,text]
+----
+x = 5, y = 4
+----
+
+=== ¿Qué es una Expresión?
+
+Una **expresión** evalúa a un valor y puede ser usada donde se espera un valor.
+
+[source,rust,linenums]
+----
+fn main() {
+    // Todo lo siguiente son expresiones
+    let a = 5;              // 5 es una expresión
+    let b = a + 1;          // a + 1 es una expresión
+    let c = if a > 3 { 10 } else { 20 };  // <1>
+
+    println!("a={}, b={}, c={}", a, b, c);
+}
+----
+<1> `if` es una expresión que retorna un valor
+
+=== Bloques como Expresiones
+
+[source,rust,linenums]
+----
+fn main() {
+    let resultado = {
+        let x = 3;
+        x * x  // <1>
+    };
+
+    println!("El resultado es: {resultado}");
+
+    let con_semicolon = {
+        let y = 5;
+        y * 2;  // <2>
+    };
+
+    println!("Con semicolon: {:?}", con_semicolon);  // <3>
+}
+----
+<1> Sin `;` → retorna `9`
+<2> Con `;` → es un statement
+<3> `con_semicolon` es `()` (unit type)
+
+.Output
+[source,text]
+----
+El resultado es: 9
+Con semicolon: ()
+----
+
+[IMPORTANT]
+====
+*Regla de oro*:
+
+* Sin `;` al final → Expresión (retorna valor)
+* Con `;` al final → Statement (no retorna valor, retorna `()`)
+====
+
+=== Funciones como Expresiones
+
+[source,rust,linenums]
+----
+/// Calcula el cuadrado de un número
+fn cuadrado(n: i32) -> i32 {
+    n * n  // <1>
+}
+
+/// Retorna el mayor de dos números
+fn maximo(a: i32, b: i32) -> i32 {
+    if a > b { a } else { b }  // <2>
+}
+
+fn main() {
+    let x = cuadrado(5);
+    let y = maximo(10, 20);
+
+    println!("Cuadrado de 5: {}", x);
+    println!("Máximo(10, 20): {}", y);
+}
+----
+<1> Expresión de retorno (sin `return` ni `;`)
+<2> `if` como expresión que retorna un valor
+
+'''
+
+== Anotaciones de Tipo
+
+Rust infiere tipos automáticamente, pero puedes (y a veces debes) anotarlos explícitamente.
+
+=== Inferencia de Tipos
+
+[source,rust,linenums]
+----
+fn main() {
+    let x = 5;           // i32 inferido
+    let y = 2.5;         // f64 inferido
+    let nombre = "Ana";  // &str inferido
+
+    println!("x: {}, y: {}, nombre: {}", x, y, nombre);
+}
+----
+
+=== Anotaciones Explícitas
+
+[source,rust,linenums]
+----
+fn main() {
+    let edad: u8 = 25;              // <1>
+    let precio: f32 = 19.99;        // <2>
+    let activo: bool = true;        // <3>
+    let letra: char = 'A';          // <4>
+
+    println!("Edad: {}, Precio: {}, Activo: {}, Letra: {}",
+             edad, precio, activo, letra);
+}
+----
+<1> `u8`: entero sin signo de 8 bits (0-255)
+<2> `f32`: flotante de 32 bits
+<3> `bool`: booleano
+<4> `char`: caracter Unicode (4 bytes)
+
+=== Cuándo Son Necesarias las Anotaciones
+
+[source,rust,linenums]
+----
+fn main() {
+    // ❌ Error: no puede inferir el tipo
+    // let numero = "42".parse().unwrap();
+
+    // ✅ Opción 1: Anotar la variable
+    let numero: i32 = "42".parse().unwrap();
+
+    // ✅ Opción 2: Turbofish syntax
+    let otro = "100".parse::<i32>().unwrap();
+
+    println!("Número: {}, Otro: {}", numero, otro);
+}
+----
+
+'''
+
+== Documentación con cargo doc
+
+Rust tiene un sistema de documentación integrado. Los **doc comments** se escriben con `///` o `//!`.
+
+=== Doc Comments para Funciones
+
+[source,rust,linenums]
+----
+/// Calcula el área de un rectángulo.
+///
+/// # Argumentos
+///
+/// * `ancho` - El ancho del rectángulo
+/// * `alto` - El alto del rectángulo
+///
+/// # Ejemplos
+///
+/// ```
+/// let area = area_rectangulo(5, 10);
+/// assert_eq!(area, 50);
+/// ```
+///
+/// # Panics
+///
+/// Esta función no hace panic.
+fn area_rectangulo(ancho: u32, alto: u32) -> u32 {
+    ancho * alto
+}
+
+fn main() {
+    let area = area_rectangulo(5, 10);
+    println!("Área: {}", area);
+}
+----
+
+=== Doc Comments para Módulos
+
+[source,rust,linenums]
+----
+//! Este módulo contiene funciones matemáticas básicas.
+//!
+//! # Ejemplos
+//!
+//! ```
+//! use mi_crate::suma;
+//! assert_eq!(suma(2, 3), 5);
+//! ```
+
+/// Suma dos números
+pub fn suma(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+/// Resta dos números
+pub fn resta(a: i32, b: i32) -> i32 {
+    a - b
+}
+----
+
+=== Generar Documentación
+
+[source,bash]
+----
+# Generar y abrir la documentación
+cargo doc --open
+----
+
+Esto genera HTML interactivo con tu documentación.
+
+[TIP]
+====
+Escribe doc comments para:
+
+* Funciones públicas
+* Structs y enums
+* Módulos
+* Comportamiento no obvio
+====
+
+'''
+
+== Ejemplos Prácticos Completos
+
+=== Ejemplo 1: Convertidor de Temperatura
+
+[source,rust,linenums]
+----
+/// Convierte grados Celsius a Fahrenheit
+///
+/// # Ejemplos
+///
+/// ```
+/// let f = celsius_a_fahrenheit(0.0);
+/// assert_eq!(f, 32.0);
+/// ```
+fn celsius_a_fahrenheit(celsius: f64) -> f64 {
+    celsius * 1.8 + 32.0
+}
+
+fn main() {
+    let temp_celsius = 25.0;
+    let temp_fahrenheit = celsius_a_fahrenheit(temp_celsius);
+
+    println!("{:.1}°C = {:.1}°F", temp_celsius, temp_fahrenheit);
+}
+----
+
+=== Ejemplo 2: Calculadora de IMC
+
+[source,rust,linenums]
+----
+/// Calcula el Índice de Masa Corporal (IMC)
+///
+/// # Argumentos
+///
+/// * `peso_kg` - Peso en kilogramos
+/// * `altura_m` - Altura en metros
+fn calcular_imc(peso_kg: f64, altura_m: f64) -> f64 {
+    peso_kg / (altura_m * altura_m)
+}
+
+fn main() {
+    let peso = 70.0;
+    let altura = 1.75;
+
+    let imc = calcular_imc(peso, altura);
+
+    println!("Peso: {}kg", peso);
+    println!("Altura: {}m", altura);
+    println!("IMC: {:.2}", imc);
+
+    // Clasificación usando expresión if
+    let clasificacion = if imc < 18.5 {
+        "Bajo peso"
+    } else if imc < 25.0 {
+        "Peso normal"
+    } else if imc < 30.0 {
+        "Sobrepeso"
+    } else {
+        "Obesidad"
+    };
+
+    println!("Clasificación: {}", clasificacion);
+}
+----
+
+=== Ejemplo 3: Contador con Estado
+
+[source,rust,linenums]
+----
+/// Representa un contador con límite máximo
+static MAX_CONTADOR: i32 = 100;
+
+fn main() {
+    let mut contador = 0;
+
+    println!("Contador inicial: {}", contador);
+
+    // Incrementar en un loop
+    for _ in 0..5 {
+        contador += 1;
+
+        if contador >= MAX_CONTADOR {
+            println!("¡Límite alcanzado!");
+            break;
+        }
+
+        println!("Contador: {}", contador);
+    }
+
+    // Shadowing para cambiar el tipo
+    let contador = format!("Final: {}", contador);
+    println!("{}", contador);
+}
+----
+
+'''
+
+== Resumen
+
+[cols="1,2,2", options="header"]
+|===
+|Concepto
+|Sintaxis
+|Cuándo Usar
+
+|*Variable inmutable*
+|`let x = 5;`
+|Por defecto, siempre que no necesites mutar
+
+|*Variable mutable*
+|`let mut x = 5;`
+|Cuando el valor cambia con el tiempo
+
+|*Shadowing*
+|`let x = ...; let x = ...;`
+|Transformaciones o cambio de tipo
+
+|*Constante*
+|`const MAX: u32 = 100;`
+|Valores conocidos en compile-time
+
+|*Static*
+|`static VAR: &str = "x";`
+|Variables globales con dirección fija
+
+|*Scope*
+|`{ let x = ...; }`
+|Limitar el alcance de variables
+|===
+
+'''
+
+== Ejercicios Prácticos
+
+=== Ejercicio 1: Variables Básicas
+
+Crea un programa que:
+
+. Declare una variable inmutable `nombre` con tu nombre
+. Declare una variable mutable `edad` con tu edad
+. Incremente la edad en 1
+. Use shadowing para convertir el nombre a mayúsculas
+
+=== Ejercicio 2: Scope
+
+Crea un programa con 3 niveles de scope anidados y demuestra qué variables son accesibles en cada nivel.
+
+=== Ejercicio 3: Expresiones
+
+Escribe una función que use un bloque de expresión para calcular el máximo de tres números.
+
+'''
+
+[quote, Rust Community]
+____
+🦀 *Recuerda*:
+
+La inmutabilidad por defecto es una de las características más importantes de Rust. Te ayuda a escribir código más seguro y predecible.
+
+Usa `mut` solo cuando realmente lo necesites.
+____
+
+*Siguiente tema*: Tipos de Datos (Escalares y Compuestos) →
